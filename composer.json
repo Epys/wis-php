@@ -1,0 +1,26 @@
+{
+    "name": "epys/wis-php-sdk",
+    "description": "Cliente Wis SDK para PHP",
+    "type": "library",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Especialistas en Procesos y Sistemas Spa",
+            "email": "soporte@epys.cl",
+            "homepage": "https://wis.cl"
+        }
+    ],
+    "minimum-stability": "stable",
+    "support": {
+        "source": "https://github.com/epys/wis-php-sdk",
+        "issues": "https://github.com/epys/wis-php-sdk/issues",
+        "forum": "https://stackoverflow.com/questions/tagged/epys+wis"
+    },
+    "require": {
+        "php": ">=5.5",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {"epys\\wis\\": "src/"}
+    }
+}
