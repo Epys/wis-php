@@ -1,6 +1,6 @@
 <?php
 
-namespace epys\wis;
+namespace Epys\Wis;
 
 class Client{
 
