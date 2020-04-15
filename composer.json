@@ -20,9 +20,6 @@
         "php": ">=5.5",
         "ext-curl": "*"
     },
-    "require-dev": {
-        "phpunit/phpunit": "9.0.*"
-    },
     "autoload": {
         "psr-4": {"Epys\\Wis\\": "src/"}
     }

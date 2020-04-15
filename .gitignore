@@ -50,10 +50,7 @@ Thumbs.db
 
 ### PHPStorm
 .idea/*
-!.idea/webServers.xml
-!.idea/deployment.xml
-!.idea/dataSources.xml
-!.idea/dataSources.local.xml
+.idea
 
 ### VisualStudio Code
 .vscode
