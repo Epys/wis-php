@@ -1,5 +1,5 @@
 
-Epsy: Cliente SDK PHP
+Epys: Cliente SDK PHP
 ========================
 
 [![Build Status](https://travis-ci.com/Epys/wis-php-sdk.svg?branch=master)](https://travis-ci.com/github/Epys/wis-php-sdk)
