@@ -11,4 +11,4 @@ before_script:
   - composer install
 
 
-script: phpunit examples/index.php
+script: phpunit test/Client.php
