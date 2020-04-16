@@ -17,7 +17,7 @@
         "forum": "https://stackoverflow.com/questions/tagged/epys+wis"
     },
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "ext-curl": "*"
     },
     "autoload": {
