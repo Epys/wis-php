@@ -2,6 +2,7 @@
     "name": "epys/wis-php-sdk",
     "description": "Cliente Wis SDK para PHP",
     "type": "library",
+    "keywords": ["wis", "flow", "whatsapp", "API"],
     "license": "LGPL-3.0+",
     "authors": [
         {
@@ -10,7 +11,6 @@
             "homepage": "https://wis.cl"
         }
     ],
-    "minimum-stability": "stable",
     "support": {
         "source": "https://github.com/epys/wis-php-sdk",
         "issues": "https://github.com/epys/wis-php-sdk/issues",
