@@ -8,7 +8,7 @@ use Epys\Wis\Console;
 class Client
 {
 
-    const VERSION = '0.1.55';
+    const VERSION = '0.01.55';
 
     const BASE_API = 'https://api.wis.cl/whatsapp';
 
