@@ -30,8 +30,5 @@
     "psr-4": {
       "Epys\\Wis\\": "src/"
     }
-  },
-  "config": {
-    "vendor-dir": "epys"
   }
 }

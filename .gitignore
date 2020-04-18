@@ -1,11 +1,20 @@
 ########## EPYS v2020-01 GitIgnore
 
 ### Composer
+vendor
+vendor/
+/vendor
 /vendor/
-/epys/
-/.idea/
-/.vscode/
+### Test
+test
+test/
+/test
 /test/
+### PHPStorm
+.idea
+.idea/
+/.idea
+/.idea/
 
 composer.lock
 
