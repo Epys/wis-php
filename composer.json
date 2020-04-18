@@ -2,6 +2,7 @@
   "name": "epys/wis-php-sdk",
   "description": "Cliente Wis SDK para PHP",
   "type": "library",
+  "version": "0.03.12",
   "keywords": [
     "wis",
     "flow",
