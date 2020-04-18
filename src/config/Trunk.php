@@ -4,7 +4,7 @@
 namespace Epys\Wis\Config;
 
 
-class Troncal
+class Trunk
 {
 
 }

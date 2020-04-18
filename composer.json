@@ -2,14 +2,14 @@
   "name": "epys/wis-php-sdk",
   "description": "Cliente Wis SDK para PHP",
   "type": "library",
-  "version": "0.03.12",
+  "version": "0.05.52",
   "keywords": [
     "wis",
     "flow",
     "whatsapp",
     "API"
   ],
-  "license": "LGPL-3.0+",
+  "license": "BSD-2-Clause",
   "authors": [
     {
       "name": "Especialistas en Procesos y Sistemas Spa",
@@ -28,7 +28,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Epys\\Wis\\": "src/"
+      "Epys\\Wis\\": "src"
     }
   }
 }

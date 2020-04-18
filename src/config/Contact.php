@@ -4,7 +4,7 @@
 namespace Epys\Wis\Config;
 
 
-class Contacto
+class Contact
 {
 
 }

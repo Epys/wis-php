@@ -2,12 +2,12 @@
 
 namespace Epys\Wis;
 
-use \Epys\Wis\Config\Normalize;
+
 
 class Client
 {
 
-    const VERSION = '0.03.12';
+    const VERSION = '0.05.52';
 
     const BASE_API = 'https://api.wis.cl';
 
