@@ -11,9 +11,27 @@ class Console
 
     const ERROR = 1000;
     const ERROR_REQUIRED = 1100;
+
     const ERROR_VALIDATION = 1200;
     const ERROR_VALIDATION_DIR = 1210;
     const ERROR_VALIDATION_JSON = 1220;
+    const ERROR_VALIDATION_EMPTY = 1250;
+
+    const ERROR_INPUT = 1300;
+    const ERROR_INPUT_ID = 1310;
+    const ERROR_INPUT_NETWORK = 1310;
+    const ERROR_INPUT_TYPE = 1320;
+    const ERROR_INPUT_TIME = 1330;
+    const ERROR_INPUT_DIRECTION = 1340;
+    const ERROR_INPUT_CONTENT = 1350;
+    const ERROR_INPUT_CONTENT_TEXT = 1351;
+    const ERROR_INPUT_CONTENT_IMAGE = 1352;
+    const ERROR_INPUT_CONTENT_STICKER = 1353;
+    const ERROR_INPUT_CONTENT_AUDIO = 1354;
+    const ERROR_INPUT_CONTENT_VIDEO = 1355;
+    const ERROR_INPUT_CONTENT_DOCUMENT = 1356;
+    const ERROR_INPUT_CONTENT_LOCATION = 1357;
+
 
     // Rutas de escritura
     private static $_path = '/tmp';
@@ -36,12 +54,12 @@ class Console
 
         // Path de escritura
         if (!$path)
-            throw new Exception('Debe indicar el Path de escritura.', self::ERROR_REQUIRED);
+            self::error('Debe indicar el Path de escritura.', self::ERROR_REQUIRED);
 
         $path = rtrim($path, '/');
 
         if (!is_dir($path))
-            throw new Exception('El Path no es valido.', self::ERROR_VALIDATION_DIR);
+            self::error('El Path no es valido.', self::ERROR_VALIDATION_DIR);
 
         // Defino Path de los logs
         self::$_path = $path;
@@ -62,13 +80,10 @@ class Console
             return;
 
         // Formateo mensaje
-        $msg = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg;
+        $msg = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
 
         // Guardo console
-        if ($codigo)
-            self::$_console['log'][$codigo] = $msg;
-        else
-            self::$_console['log'][] = $msg;
+        self::$_console['log'][] = $msg;
 
         // Guardo registros
         self::_putContents(self::$_path_logs . date("/Y/m"), $msg, $codigo);
@@ -89,10 +104,7 @@ class Console
             return;
 
         // Guardo console
-        if ($codigo)
-            self::$_console['input'][$codigo] = $json;
-        else
-            self::$_console['input'][] = $json;
+        self::$_console['input'][] = json_encode($json);
 
         // Guardo registros
         self::_putContents(self::$_path_input . date("/Y/m"), json_encode($json), $codigo);
@@ -113,16 +125,24 @@ class Console
             return;
 
         // Formateo mensaje
-        $msg = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg;
+        $msge = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
 
         // Guardo console
-        if ($codigo)
-            self::$_console['log'][$codigo] = $msg;
-        else
-            self::$_console['log'][] = $msg;
+        self::$_console['error'][] = $msge;
 
         // Guardo registros
-        self::_putContents(self::$_path_error . date("/Y/m"), $msg, $codigo);
+        self::_putContents(self::$_path_error . date("/Y/m"), $msge, $codigo);
+
+        header('Content-Type:application/json');
+        die(json_encode(array_filter([
+            "success" => false,
+            "timestamp" => time(),
+            "pid" => getmypid(),
+            "code" => $codigo,
+            "error" => $msg
+        ], function ($value) {
+            return !is_null($value) && $value !== '';
+        })));
 
     }
 
@@ -137,17 +157,17 @@ class Console
     private static function _putContents($filepath, $str, $name = false)
     {
 
-        // Si el archivo no tiene nombre
-        if (!$name)
-            $name = date('d');
-
         // Actualizo la ruta de los logs
         $filepath = rtrim(self::$_path . self::$_path_wis . $filepath, '/');
         if (!is_dir($filepath))
             mkdir($filepath, 0777, true);
 
-        // Guardo contenido
-        @file_put_contents($filepath . "/" . $name . ".log", $str . PHP_EOL, FILE_APPEND);
+        // Guardo contenido con nombre especial
+        if ($name)
+            @file_put_contents($filepath . "/" . $name . ".log", $str . PHP_EOL, FILE_APPEND);
+
+        // Guardo contenido con el día
+        @file_put_contents($filepath . "/" . date('d') . ".log", $str . PHP_EOL, FILE_APPEND);
 
     }
 
