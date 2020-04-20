@@ -9,7 +9,6 @@ class Normalize
 
     /**
      * Método para capturar input de PHP
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     public static function Input()
@@ -40,7 +39,6 @@ class Normalize
 
     /**
      * Método para Validar
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     public static function Validate($args)
@@ -54,7 +52,6 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     private static function _interface($args)
@@ -86,7 +83,6 @@ class Normalize
     /**
      * Método para validar la estructura del mensaje
      * @param $args Argumento recivido en POST
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     private static function _message($args)
@@ -142,7 +138,6 @@ class Normalize
     /**
      * Método para validar la estructura del dlv
      * @param $args Argumento recivido en POST
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     private static function _dlv($args)

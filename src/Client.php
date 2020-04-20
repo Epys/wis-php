@@ -6,20 +6,50 @@ namespace Epys\Wis;
 class Client
 {
 
-    const VERSION = '0.09.42';
+    const VERSION = '0.05.52';
 
     const BASE_API = 'https://api.wis.cl';
 
     /**
      * Input de PHP
      */
-    public static $args = [];
+    public static $args;
 
 
     /**
      * Conexión a base de datos
      */
-    public static $database = false;
+    public static $database;
+
+    /**
+     * Network provider
+     */
+    public static $network;
+
+    /**
+     * Contact
+     */
+    public static $contact;
+
+    /**
+     * Trunk
+     */
+    public static $trunk;
+
+    /**
+     * Activ
+     */
+    public static $activ;
+
+    /**
+     * Conversation
+     */
+    public static $conversation;
+
+    /**
+     * IVR
+     */
+    public static $ivr;
 
 
     /**
@@ -55,7 +85,11 @@ class Client
         if ($token)
             self::setToken($token);
 
+    }
 
+    function __destruct()
+    {
+        \Epys\Wis\Console::destruct();
     }
 
 
@@ -92,7 +126,100 @@ class Client
     public static function Normalize()
     {
         self::$args = Config\Normalize::Input();
+
+        // Seteo Network
+        switch (self::$args->network) {
+            case 'whatsapp':
+                self::$network = new \Epys\Wis\Network\Whatsapp();
+                break;
+        }
     }
 
+    /**
+     * Funcion para retornar type de entrada
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-17
+     */
+    public static function isType()
+    {
+        if (!self::$args->type)
+            \Epys\Wis\Console::error('El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.', \Epys\Wis\Console::ERROR_INPUT_TYPE);
+
+        // Retorno datos
+        return self::$args->type;
+    }
+
+    /**
+     * Funcion para retornar type de entrada
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-17
+     */
+    public static function isLoad($arr = [])
+    {
+        foreach ($arr as $variable) {
+            if (!self::${$variable})
+                \Epys\Wis\Console::error('El objeto `self::$' . $variable . '` no esta definido.', \Epys\Wis\Console::ERROR_INPUT);
+        }
+    }
+
+    /**
+     * Funcion para normalizar las variables de entrada
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-17
+     */
+    public static function Contact()
+    {
+        return self::$contact = \Epys\Wis\Config\Contact::Get();
+    }
+
+
+    /**
+     * Funcion para normalizar las variables de entrada
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-18
+     */
+    public static function Trunk()
+    {
+        return self::$trunk = \Epys\Wis\Config\Trunk::Get();
+    }
+
+
+    /**
+     * Funcion para verificar si el contacto y la tecno tienen activs pendientes
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-19
+     */
+    public static function Activ()
+    {
+        return self::$activ = \Epys\Wis\Flow\Activtemp::getContactTecno();
+    }
+
+
+    /**
+     * Funcion para verificar si el contacto y la tecno tienen conversaciones
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-19
+     */
+    public static function Conversation()
+    {
+        return self::$conversation = \Epys\Wis\Bot\Conversation::getContactTrunk();
+    }
+
+
+    /**
+     * Funcion para inizializar el bot
+     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * @version 2020-04-19
+     */
+    public static function Bot()
+    {
+
+        //Envio Logs
+        \Epys\Wis\Console::log('Inicio function Client::Bot().');
+
+        // Inizializo Bot
+        new \Epys\Wis\Bot\Init();
+
+    }
 
 }

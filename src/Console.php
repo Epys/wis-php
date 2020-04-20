@@ -18,6 +18,7 @@ class Console
     const ERROR_VALIDATION_EMPTY = 1250;
 
     const ERROR_INPUT = 1300;
+    const ERROR_DATABASE = 1301;
     const ERROR_INPUT_ID = 1310;
     const ERROR_INPUT_NETWORK = 1310;
     const ERROR_INPUT_TYPE = 1320;
@@ -46,7 +47,6 @@ class Console
      * Método que define path de logs
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-14
      */
     public static function setPath($path = null)
@@ -70,7 +70,6 @@ class Console
      * Método que escribe un mensaje en los logs
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function log($msg = null, $codigo = false)
@@ -80,13 +79,13 @@ class Console
             return;
 
         // Formateo mensaje
-        $msg = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
+        $msgs = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
 
         // Guardo console
-        self::$_console['log'][] = $msg;
+        self::$_console['log'][] = [date("H:i:s") => $msg];
 
         // Guardo registros
-        self::_putContents(self::$_path_logs . date("/Y/m"), $msg, $codigo);
+        self::_putContents(self::$_path_logs . date("/Y/m"), $msgs, $codigo);
 
     }
 
@@ -94,7 +93,6 @@ class Console
      * Método que escribe un mensaje en los logs pero de formato input (json)
      * @param $codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $json Lo que recepciona PHP en input
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function input($json = null, $codigo = false)
@@ -104,7 +102,7 @@ class Console
             return;
 
         // Guardo console
-        self::$_console['input'][] = json_encode($json);
+        self::$_console['input'][] = $json;
 
         // Guardo registros
         self::_putContents(self::$_path_input . date("/Y/m"), json_encode($json), $codigo);
@@ -115,7 +113,6 @@ class Console
      * Método que escribe un mensaje en los logs pero de formato error
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function error($msg = null, $codigo = false)
@@ -133,13 +130,16 @@ class Console
         // Guardo registros
         self::_putContents(self::$_path_error . date("/Y/m"), $msge, $codigo);
 
+        self::log($msg);
+
         header('Content-Type:application/json');
         die(json_encode(array_filter([
             "success" => false,
             "timestamp" => time(),
             "pid" => getmypid(),
             "code" => $codigo,
-            "error" => $msg
+            "error" => $msg,
+            "logs" => self::$_console['log']
         ], function ($value) {
             return !is_null($value) && $value !== '';
         })));
@@ -151,7 +151,6 @@ class Console
      * @param $filepath Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $str Mensaje que se desea escribir
      * @param $name Nombre del archivo
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     private static function _putContents($filepath, $str, $name = false)
@@ -174,7 +173,6 @@ class Console
 
     /**
      * Método que imprime la consola
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function print()
@@ -184,12 +182,36 @@ class Console
 
     /**
      * Método que imprime la consola
-     * @author Adonías Vásquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function dump()
     {
         var_dump(self::$_console);
+    }
+
+    /**
+     * Método que imprime la consola
+     * @version 2020-04-18
+     */
+    public static function debug()
+    {
+        $obj = array_filter(self::$_console, function ($value) {
+            return !is_null($value) && $value !== '';
+        });
+
+        header('Content-Type:application/json');
+        die(json_encode($obj));
+    }
+
+    public static function destruct()
+    {
+
+        if (self::$_console['log'])
+            self::_putContents(self::$_path_logs . date("/Y/m"), ' ');
+
+        if (self::$_console['error'])
+            self::_putContents(self::$_path_error . date("/Y/m"), ' ');
+
     }
 
 
