@@ -115,7 +115,7 @@ class Console
      * @param msg Mensaje que se desea escribir
      * @version 2020-04-18
      */
-    public static function error($msg = null, $codigo = false)
+    public static function error($msg = null, $codigo = null, $class = __CLASS__, $line = __LINE__)
     {
 
         if (!$msg)
@@ -137,9 +137,12 @@ class Console
             "success" => false,
             "timestamp" => time(),
             "pid" => getmypid(),
+            "class" => $class,
+            "line" => $line,
             "code" => $codigo,
             "error" => $msg,
-            "logs" => self::$_console['log']
+            "logs" => self::$_console['log'],
+            "input" => self::$_console['input']
         ], function ($value) {
             return !is_null($value) && $value !== '';
         })));

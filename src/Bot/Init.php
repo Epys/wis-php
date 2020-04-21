@@ -47,16 +47,38 @@ class Init
         // Valido Contacto
         \Epys\Wis\Console::log('Valido que exista contacto.');
         if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO) {
-            \Epys\Wis\Console::error('La contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
+
+            // Envio mensaje
+            \Epys\Wis\Client::$network
+                ->provider(\Epys\Wis\Client::$args->provider->number)
+                ->contact(\Epys\Wis\Client::$args->contact->number)
+                ->text('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
+                ->send();
+
+            \Epys\Wis\Console::error('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
         }
 
-        // Conversación
-        \Epys\Wis\Console::log('Valido que exista pregunta en conversación.');
-        if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
-
-
+        // Verifico si hay actividades Pendientes
+        if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
+            // Verifico pregunta pendiente
+            \Epys\Wis\Console::log('Valido que exista pregunta en conversación.');
+            if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
+                // Verifico pregunta pendiente
+                \Epys\Wis\Bot\Ask::Activ();
+            } else {
+                // Guardo comentario
+            }
+        } else {
+            // Verifico pregunta pendiente
+            \Epys\Wis\Console::log('Valido que exista pregunta en conversación.');
+            if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
+                // Verifico pregunta pendiente
+                \Epys\Wis\Bot\Ask::Fina();
+            } else {
+                // Genero IVR
+                \Epys\Wis\Bot\Ivr::Init();
+            }
         }
-
 
     }
 

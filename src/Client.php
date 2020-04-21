@@ -6,7 +6,7 @@ namespace Epys\Wis;
 class Client
 {
 
-    const VERSION = '0.05.52';
+    const VERSION = '0.11.05';
 
     const BASE_API = 'https://api.wis.cl';
 
@@ -51,6 +51,10 @@ class Client
      */
     public static $ivr;
 
+    /**
+     * Ask
+     */
+    public static $ask;
 
     /**
      * API Token
@@ -96,7 +100,6 @@ class Client
     /**
      * Método para asignar token
      * @param $token Claves de acceso
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-17
      */
     public static function setToken($token)
@@ -107,20 +110,37 @@ class Client
     }
 
     /**
-     * Método para asignar token
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
+     * Método para asignar base de datos
      * @version 2020-04-17
      */
     public static function setDatabase($db)
     {
         \Epys\Wis\Console::log('Agrego conexion a base de datos.');
         self::$database = $db;
+    }
 
+    /**
+     * Método para asignar IVR
+     * @version 2020-04-20
+     */
+    public static function setIvr($ivr)
+    {
+        \Epys\Wis\Console::log('Agrego IVR.');
+        self::$ivr = $ivr;
+    }
+
+    /**
+     * Método para asignar pregunta
+     * @version 2020-04-20
+     */
+    public static function setAsk($ask)
+    {
+        \Epys\Wis\Console::log('Agrego pregunta.');
+        self::$ask = $ask;
     }
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-17
      */
     public static function Normalize()
@@ -130,20 +150,22 @@ class Client
         // Seteo Network
         switch (self::$args->network) {
             case 'whatsapp':
-                self::$network = new \Epys\Wis\Network\Whatsapp();
+                self::$network = new \Epys\Wis\Network\Whatsapp(
+                    self::$args->provider->number,
+                    self::$args->contact->number
+                );
                 break;
         }
     }
 
     /**
      * Funcion para retornar type de entrada
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-17
      */
     public static function isType()
     {
         if (!self::$args->type)
-            \Epys\Wis\Console::error('El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.', \Epys\Wis\Console::ERROR_INPUT_TYPE);
+            \Epys\Wis\Console::error('El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.', \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
 
         // Retorno datos
         return self::$args->type;
@@ -151,20 +173,18 @@ class Client
 
     /**
      * Funcion para retornar type de entrada
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-17
      */
     public static function isLoad($arr = [])
     {
         foreach ($arr as $variable) {
             if (!self::${$variable})
-                \Epys\Wis\Console::error('El objeto `self::$' . $variable . '` no esta definido.', \Epys\Wis\Console::ERROR_INPUT);
+                \Epys\Wis\Console::error('El objeto `self::$' . $variable . '` no esta definido.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
     }
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-17
      */
     public static function Contact()
@@ -175,7 +195,6 @@ class Client
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-18
      */
     public static function Trunk()
@@ -186,7 +205,6 @@ class Client
 
     /**
      * Funcion para verificar si el contacto y la tecno tienen activs pendientes
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-19
      */
     public static function Activ()
@@ -197,7 +215,6 @@ class Client
 
     /**
      * Funcion para verificar si el contacto y la tecno tienen conversaciones
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-19
      */
     public static function Conversation()
@@ -208,7 +225,6 @@ class Client
 
     /**
      * Funcion para inizializar el bot
-     * @author Adonías Vasquez (adonias.vasquez[at]epys.cl)
      * @version 2020-04-19
      */
     public static function Bot()

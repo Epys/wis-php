@@ -4,7 +4,7 @@
 namespace Epys\Wis\Network\Whatsapp;
 
 
-class Document
+class Stiker
 {
     /**
      * Método para normalizar y pasar a json
