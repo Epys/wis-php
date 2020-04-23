@@ -13,8 +13,7 @@ class Conversation
      */
     public static function getContactTrunk()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Conversation::getContactTrunk().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::getContactTrunk().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database']);
@@ -29,13 +28,30 @@ class Conversation
 
         // Busco si hay alguna pregunta en el la tabla conversación
         $conversacion = \Epys\Wis\Client::$database
+            ->select("*")
             ->where([
                 "NMRO_CONTACTO" => \Epys\Wis\Client::$contact->NMRO_CONTACTO,
                 "NMRO_TRONCAL" => \Epys\Wis\Client::$trunk->NMRO_TRONCAL,
             ])
-            ->join("WI.WIT_PREGUNTA P", "P.CODI_PREGUNTA = C.CODI_PREGUNTA", "left")
-            ->join("WI.WIT_IVR I", "I.IDEN_IVR = C.IDEN_IVR", "left")
             ->get("WI.WIT_CONVERSACION C")->result()[0];
+
+        // Asigno IVR actual
+        if ($conversacion->IDEN_IVR) {
+            $ivr = \Epys\Wis\Bot\Ivr::iden($conversacion->IDEN_IVR);
+            \Epys\Wis\Client::setIvr($ivr);
+            foreach ($ivr as $k => $v) $conversacion->$k = $v;
+        }
+
+        // Asigno Pregunta actual
+        if ($conversacion->CODI_PREGUNTA) {
+            $preg = \Epys\Wis\Bot\Ask::codi($conversacion->CODI_PREGUNTA);
+            \Epys\Wis\Client::setAsk($preg);
+            foreach ($preg as $k => $v) $conversacion->{$k} = $v;
+
+            if ($preg->CODI_ACCION)
+                $acc = \Epys\Wis\Bot\Action::codi($preg->CODI_ACCION);
+            foreach ($acc as $k => $v) $conversacion->{$k} = $v;
+        }
 
         //Envio Logs
         if ($conversacion)
@@ -45,21 +61,9 @@ class Conversation
                 CODI_PREGUNTA => $conversacion->CODI_PREGUNTA,
                 IDEN_ACTIV => $conversacion->IDEN_ACTIV,
                 IDEN_IVR => $conversacion->IDEN_IVR,
-                CODI_IVR => $conversacion->CODI_IVR
+                CODI_IVR => $conversacion->CODI_IVR,
+                CODI_ACCION => $conversacion->CODI_IVR
             ])));
-
-        // Asigno IVR actual
-        if ($conversacion->IDEN_IVR) {
-            unset($conversacion->IDEN_CONVERSACION, $conversacion->FECH_CONVERSACION, $conversacion->NMRO_CONTACTO, $conversacion->NMRO_TRONCAL, $conversacion->CODI_PREGUNTA, $conversacion->IDEN_ACTIV);
-            \Epys\Wis\Client::setIvr($conversacion);
-        }
-
-        // Asigno Pregunta actual
-        if ($conversacion->CODI_PREGUNTA) {
-            unset($conversacion->IDEN_CONVERSACION, $conversacion->FECH_CONVERSACION, $conversacion->NMRO_CONTACTO, $conversacion->NMRO_TRONCAL, $conversacion->IDEN_IVR);
-            \Epys\Wis\Client::setAsk($conversacion);
-        }
-
 
         return $conversacion;
 
@@ -72,8 +76,7 @@ class Conversation
      */
     public static function delContactTrunk()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Conversation::delContactTrunk().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::delContactTrunk().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'contact', 'trunk']);
@@ -93,8 +96,7 @@ class Conversation
      */
     public static function setContactTrunk($option = ["IDEN_IVR", "CODI_PREGUNTA", "IDEN_ACTIV"])
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Conversation::setContactTrunk().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::setContactTrunk().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'contact', 'trunk']);

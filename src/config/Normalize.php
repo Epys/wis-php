@@ -13,8 +13,7 @@ class Normalize
      */
     public static function Input()
     {
-
-        \Epys\Wis\Console::log('Capturo datos ´php://input´.');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Normalize::Input().');
 
         // Capturo datos
         $args = json_decode(file_get_contents('php://input'), FALSE);
@@ -43,10 +42,9 @@ class Normalize
      */
     public static function Validate($args)
     {
+        \Epys\Wis\Console::log('Epys\Wis\Config\Normalize::Validate().');
+        self::type($args);
 
-        \Epys\Wis\Console::log('Validación de la estructura.');
-        self::_interface($args);
-        \Epys\Wis\Console::log('Validación correcta.');
     }
 
     /**
@@ -54,9 +52,9 @@ class Normalize
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    private static function _interface($args)
+    protected static function type($args)
     {
-
+        \Epys\Wis\Console::log('Epys\Wis\Config\Normalize::type().');
 
         if (!$args->id)
             \Epys\Wis\Console::error('No existe objeto ID.', \Epys\Wis\Console::ERROR_INPUT_ID,__CLASS__,__LINE__);
@@ -69,10 +67,10 @@ class Normalize
 
         switch ($args->type) {
             case 'message':
-                self::_message($args);
+                self::message($args);
                 break;
             case 'dlv':
-                self::_dlv($args);
+                self::dlv($args);
                 break;
             default:
                 \Epys\Wis\Console::error('El objeto TYPE no es valido.', \Epys\Wis\Console::ERROR_INPUT_TYPE,__CLASS__,__LINE__);
@@ -85,8 +83,9 @@ class Normalize
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    private static function _message($args)
+    protected static function message($args)
     {
+        \Epys\Wis\Console::log('Epys\Wis\Config\Normalize::message().');
 
         if (!$args->contact->number)
             \Epys\Wis\Console::error('No existe objeto CONTACT.NUMBER.', \Epys\Wis\Console::ERROR_REQUIRED,__CLASS__,__LINE__);
@@ -140,8 +139,9 @@ class Normalize
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    private static function _dlv($args)
+    protected static function dlv($args)
     {
+        \Epys\Wis\Console::log('Epys\Wis\Config\Normalize::dlv().');
 
         if (!$args->dlvStatus->time)
             \Epys\Wis\Console::error('No existe objeto DLVSTATUS.TIME.', \Epys\Wis\Console::ERROR_REQUIRED,__CLASS__,__LINE__);

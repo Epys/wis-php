@@ -14,8 +14,7 @@ class Contact
      */
     public static function Get()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Contact::Get().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Contact::Get().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);
@@ -45,11 +44,9 @@ class Contact
      * Método para crear un contacto en la base de datos
      * @version 2020-04-14
      */
-    private static function _setContact()
+    protected static function setContact()
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Contact::_setContact().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Contact::setContact().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);

@@ -14,9 +14,7 @@ class Service
     public
     static function POST($url, $obj)
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Service::POST(' . $url . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Http\Service::POST(' . $url . ').');
 
         if (!$url)
             \Epys\Wis\Console::error('No esta definido el url de envio.', \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);

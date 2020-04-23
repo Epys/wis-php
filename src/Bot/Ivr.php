@@ -12,9 +12,7 @@ class Ivr
      */
     public static function Init()
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Ivr::Init().');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Init().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);
@@ -35,8 +33,7 @@ class Ivr
      */
     protected static function Pregunta($ivr = false)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Ivr::Pregunta(' . $ivr . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Pregunta().');
 
         // Si no envio IVR, per defecto es el de la troncal
         if (!$ivr)
@@ -54,7 +51,7 @@ class Ivr
         }
 
         // Genero IVR
-        $mensaje = self::_generar($ivr);
+        $mensaje = self::generar($ivr);
 
         // Si no existe ivr elimino conversación y retorno
         if (!$mensaje) {
@@ -74,8 +71,7 @@ class Ivr
      */
     protected static function Respuesta()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Ivr::Respuesta().');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Respuesta().');
 
         // Verifico que la troncal tenga un IVR
         if (!\Epys\Wis\Client::$conversation->IDEN_IVR) {
@@ -101,12 +97,11 @@ class Ivr
             //Si la respuesta es 0
             if ($respuesta[0] == "0") {
                 //Vuelvo a mostrar menu IVR
-                self::_volver(\Epys\Wis\Client::$conversation->IDEN_IVR);
+                self::volver(\Epys\Wis\Client::$conversation->IDEN_IVR);
             } else {
 
                 // Busco si existe el IVR en base a su código
                 $ivr = self::codi(\Epys\Wis\Client::$conversation->CODI_IVR . $respuesta[0]);
-                \Epys\Wis\Console::log(\Epys\Wis\Client::$conversation->CODI_IVR . $respuesta[0]);
                 if ($ivr) {
 
                     // Guardo datos del IVR para acciones
@@ -129,8 +124,6 @@ class Ivr
                     // Pausa por 3 segundos
                     sleep(3);
 
-
-
                 } else {
                     // Envio Mensaje por Wsap
                     \Epys\Wis\Client::$network->text("No existe opción " . $respuesta[0] . " en este menú.")->send();
@@ -145,12 +138,10 @@ class Ivr
     }
 
 
-    private
-    static function _generar($parent = false)
+    protected
+    static function generar($parent = false)
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Ivr::_generar(' . $parent . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::generar(' . $parent . ').');
 
         if (!$parent)
             return;
@@ -173,11 +164,9 @@ class Ivr
     }
 
     private
-    static function _volver($iden)
+    static function volver($iden)
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Ivr::_volver().');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::volver(' . $iden . ').');
 
         // Limpio conversacion
         \Epys\Wis\Config\Conversation::delContactTrunk();
@@ -198,6 +187,8 @@ class Ivr
     public
     static function iden($iden)
     {
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::iden(' . $iden . ').');
+
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database']);
 
@@ -206,13 +197,15 @@ class Ivr
     }
 
     public
-static function codi($codi)
-{
-    // Verifico que esten cargados los datos
-    \Epys\Wis\Client::isLoad(['database']);
+    static function codi($codi)
+    {
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::codi(' . $codi . ').');
 
-    return \Epys\Wis\Client::$database->where(["I.CODI_IVR" => $codi, "I.ACTIVO" => 1])
-        ->get("WI.WIT_IVR I")->result()[0];
-}
+        // Verifico que esten cargados los datos
+        \Epys\Wis\Client::isLoad(['database']);
+
+        return \Epys\Wis\Client::$database->where(["I.CODI_IVR" => $codi, "I.ACTIVO" => 1])
+            ->get("WI.WIT_IVR I")->result()[0];
+    }
 
 }

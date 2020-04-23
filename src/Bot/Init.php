@@ -12,9 +12,7 @@ class Init
      */
     public function __construct()
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Bot::Init().');
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::__construct().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);
@@ -43,11 +41,10 @@ class Init
      */
     protected static function received()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::received().');
 
         // Valido Troncal
-        \Epys\Wis\Console::log('Valido que exista troncal.');
         if (!\Epys\Wis\Client::$trunk->NMRO_TRONCAL) {
-            // Envio mensaje
             \Epys\Wis\Client::$network
                 ->provider(\Epys\Wis\Client::$args->provider->number)
                 ->contact(\Epys\Wis\Client::$args->contact->number)
@@ -57,38 +54,41 @@ class Init
         }
 
         // Valido Contacto
-        \Epys\Wis\Console::log('Valido que exista contacto.');
         if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO) {
-
-            // Envio mensaje
             \Epys\Wis\Client::$network
                 ->provider(\Epys\Wis\Client::$args->provider->number)
                 ->contact(\Epys\Wis\Client::$args->contact->number)
                 ->text('El contacto +' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
                 ->send();
-
             \Epys\Wis\Console::error('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Verifico si hay actividades Pendientes
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
-            // Verifico pregunta pendiente
-            \Epys\Wis\Console::log('Valido que exista pregunta en conversación.');
+
+            \Epys\Wis\Console::log('Epys\Wis\Bot\Init::received() IDEN_ACTIV[' . \Epys\Wis\Client::$activ->IDEN_ACTIV . '].');
+
             if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
-                // Verifico pregunta pendiente
-                \Epys\Wis\Bot\Ask::Activ();
+                \Epys\Wis\Bot\Ask::Response();
             } else {
+                // Verifico pregunta pendiente
+                \Epys\Wis\Bot\Ask::Request(\Epys\Wis\Client::$activ->IDEN_ACTIV);
                 // Guardo comentario
+                \Epys\Wis\Flow\Comentario::setComentario();
             }
+
         } else {
-            // Verifico pregunta pendiente
-            \Epys\Wis\Console::log('Valido que exista pregunta en conversación.');
+
             if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
-                // Verifico pregunta pendiente
-                \Epys\Wis\Bot\Ask::Fina();
+
+                // Respondo pregunta
+                \Epys\Wis\Bot\Ask::Response(\Epys\Wis\Client::$conversation->IDEN_ACTIV);
+
             } else {
+
                 // Genero IVR
                 \Epys\Wis\Bot\Ivr::Init();
+
             }
         }
 
@@ -100,7 +100,7 @@ class Init
      */
     protected static function sent()
     {
-
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::sent().');
 
     }
 }

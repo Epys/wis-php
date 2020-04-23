@@ -37,8 +37,7 @@ class Whatsapp implements NetworkInterface
      */
     public function __construct($provider = null, $contact = null, $transac = null)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::__construct().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::__construct().');
 
         if ($provider)
             self::provider($provider);
@@ -58,8 +57,7 @@ class Whatsapp implements NetworkInterface
     public
     function check(): bool
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::check(' . ((self::$_provider && self::$_contact) ? true : false) . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::check(' . ((self::$_provider && self::$_contact) ? true : false) . ').');
 
         return (self::$_provider && self::$_contact) ? true : false;
     }
@@ -71,8 +69,7 @@ class Whatsapp implements NetworkInterface
     public
     function send($provider = null, $contact = null, $transac = null, $content = null)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::send().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::send().');
 
         if ($provider)
             self::provider($provider);
@@ -121,8 +118,7 @@ class Whatsapp implements NetworkInterface
     public
     function options($options = ["provider", "contact", "transac"])
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::options().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::options().');
 
         if ($options['provider'])
             self::provider($options['provider']);
@@ -144,8 +140,7 @@ class Whatsapp implements NetworkInterface
     public
     function provider($provider)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::provider(' . $provider . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::provider(' . $provider . ').');
 
         // Defino proveedor
         self::$_provider = $provider;
@@ -161,8 +156,7 @@ class Whatsapp implements NetworkInterface
     public
     function contact($contact)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::contact(' . $contact . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::contact(' . $contact . ').');
 
         // Defino contacto
         self::$_contact = $contact;
@@ -178,8 +172,7 @@ class Whatsapp implements NetworkInterface
     public
     function transac($transac)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::transac(' . $transac . ').');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::transac(' . $transac . ').');
 
         // Defino transac
         self::$_transac = $transac;
@@ -195,8 +188,8 @@ class Whatsapp implements NetworkInterface
     public
     function text($text)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::text().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::text().');
+
         self::$_content = \Epys\Wis\Network\Whatsapp\Text::Normalize($text);
 
         // Retorno Clase
@@ -210,8 +203,7 @@ class Whatsapp implements NetworkInterface
     public
     function image($file, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::image().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::image().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Image::Normalize($file, $caption);
 
@@ -226,8 +218,7 @@ class Whatsapp implements NetworkInterface
     public
     function stiker($file, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::stiker().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::stiker().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Stiker::Normalize($file, $caption);
 
@@ -242,8 +233,7 @@ class Whatsapp implements NetworkInterface
     public
     function document($file, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::document().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::document().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Document::Normalize($file, $caption);
 
@@ -258,8 +248,7 @@ class Whatsapp implements NetworkInterface
     public
     function audio($file, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::audio().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::audio().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Audio::Normalize($file, $caption);
 
@@ -274,8 +263,7 @@ class Whatsapp implements NetworkInterface
     public
     function video($file, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::video().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::video().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Video::Normalize($file, $caption);
 
@@ -290,8 +278,7 @@ class Whatsapp implements NetworkInterface
     public
     function location($latitude, $longitude, $caption)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::location().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::location().');
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Location::Normalize($latitude, $longitude, $caption);
 
@@ -306,6 +293,8 @@ class Whatsapp implements NetworkInterface
     protected
     static function clientid()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::clientid().');
+
         return hexdec(uniqid());
     }
 

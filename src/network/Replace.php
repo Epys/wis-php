@@ -13,8 +13,7 @@ class Replace
     public
     static function strtr($msje)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Whatsapp::replace().');
+        \Epys\Wis\Console::log('Epys\Wis\Network\Replace::strtr().');
 
         $remplazar = [];
 

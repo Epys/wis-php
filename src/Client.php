@@ -74,6 +74,7 @@ class Client
      */
     public function __construct($token = false, $options = [])
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::__construct().');
 
         $this->options = $options;
 
@@ -93,6 +94,7 @@ class Client
 
     function __destruct()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::__destruct().');
         \Epys\Wis\Console::destruct();
     }
 
@@ -104,7 +106,7 @@ class Client
      */
     public static function setToken($token)
     {
-        \Epys\Wis\Console::log('Defino token de conexión [' . $token . '].');
+        \Epys\Wis\Console::log('Epys\Wis\Client::setToken(' . $token . ').');
         self::$token = $token;
 
     }
@@ -115,7 +117,7 @@ class Client
      */
     public static function setDatabase($db)
     {
-        \Epys\Wis\Console::log('Agrego conexion a base de datos.');
+        \Epys\Wis\Console::log('Epys\Wis\Client::setDatabase().');
         self::$database = $db;
     }
 
@@ -125,7 +127,7 @@ class Client
      */
     public static function setIvr($ivr)
     {
-        \Epys\Wis\Console::log('Agrego IVR.');
+        \Epys\Wis\Console::log('Epys\Wis\Client::setIvr().');
         self::$ivr = $ivr;
     }
 
@@ -135,8 +137,21 @@ class Client
      */
     public static function setAsk($ask)
     {
-        \Epys\Wis\Console::log('Agrego pregunta.');
+        \Epys\Wis\Console::log('Epys\Wis\Client::setAsk().');
         self::$ask = $ask;
+    }
+
+    /**
+     * Método para asignar transaccion al input
+     * @version 2020-04-20
+     */
+    public static function setArgstran($tran)
+    {
+        return;
+        if (self::$args->transac < 1) {
+            \Epys\Wis\Console::log('Epys\Wis\Client::setArgstran(' . $tran . ')');
+            self::$args->transac = $tran;
+        }
     }
 
     /**
@@ -145,6 +160,8 @@ class Client
      */
     public static function Normalize()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::Normalize().');
+
         self::$args = Config\Normalize::Input();
 
         // Seteo Network
@@ -189,6 +206,7 @@ class Client
      */
     public static function Contact()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::Contact().');
         return self::$contact = \Epys\Wis\Config\Contact::Get();
     }
 
@@ -199,6 +217,7 @@ class Client
      */
     public static function Trunk()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::Trunk().');
         return self::$trunk = \Epys\Wis\Config\Trunk::Get();
     }
 
@@ -209,6 +228,7 @@ class Client
      */
     public static function Activ()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::Activ().');
         return self::$activ = \Epys\Wis\Flow\Activtemp::getContactTecno();
     }
 
@@ -219,6 +239,7 @@ class Client
      */
     public static function Conversation()
     {
+        \Epys\Wis\Console::log('Epys\Wis\Client::Conversation().');
         return self::$conversation = \Epys\Wis\Config\Conversation::getContactTrunk();
     }
 
@@ -230,8 +251,7 @@ class Client
     public static function Bot()
     {
 
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Client::Bot().');
+        \Epys\Wis\Console::log('Epys\Wis\Client::Bot().');
 
         // Inizializo Bot
         new \Epys\Wis\Bot\Init();

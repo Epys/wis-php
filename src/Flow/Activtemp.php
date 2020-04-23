@@ -3,7 +3,6 @@
 
 namespace Epys\Wis\Flow;
 
-
 class Activtemp
 {
 
@@ -13,8 +12,7 @@ class Activtemp
      */
     public static function getContactTecno()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Activtemp::getContactTecno().');
+        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getContactTecno().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database']);
@@ -27,7 +25,6 @@ class Activtemp
         if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO)
             return [];
 
-
         // Si existe actividad pendiente con la troncal
         $activ = \Epys\Wis\Client::$database->where([
             "CODI_TECNO" => \Epys\Wis\Client::$trunk->CODI_TECNO,
@@ -36,7 +33,7 @@ class Activtemp
         ])->get("FD.FDT_ACTIVTEMP")->result()[0];
 
         //Envio Logs
-        if ($activ)
+        if ($activ) {
             \Epys\Wis\Console::log(([
                 Activtemp => [
                     IDEN_ACTIV => $activ->IDEN_ACTIV,
@@ -46,6 +43,10 @@ class Activtemp
                     IDEN_USERING => $activ->IDEN_USERING
                 ]
             ]));
+
+            // Agrego transaccion a los argumentos
+            \Epys\Wis\Client::setArgstran($activ->IDEN_ACTIV);
+        }
 
         return $activ;
 
@@ -57,8 +58,7 @@ class Activtemp
      */
     public static function getContact()
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Activtemp::getContact().');
+        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getContact().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args', 'contact']);
@@ -70,7 +70,10 @@ class Activtemp
         ])->get("FD.FDT_ACTIVTEMP")->result()[0];
 
         //Envio Logs
-        if ($activ)
+        if ($activ) {
+            // Agrego transaccion a los argumentos
+            \Epys\Wis\Client::setArgstran($activ->IDEN_ACTIV);
+
             \Epys\Wis\Console::log(([
                 Activtemp => [
                     IDEN_ACTIV => $activ->IDEN_ACTIV,
@@ -80,6 +83,9 @@ class Activtemp
                     IDEN_USERING => $activ->IDEN_USERING
                 ]
             ]));
+
+        }
+
 
         return $activ;
 
@@ -91,8 +97,7 @@ class Activtemp
      */
     public static function getActiv($iden)
     {
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Activtemp::getActiv().');
+        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getActiv(' . $iden . ').');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database']);
@@ -103,7 +108,10 @@ class Activtemp
         ])->get("FD.FDT_ACTIVTEMP")->result()[0];
 
         //Envio Logs
-        if ($activ)
+        if ($activ) {
+            // Agrego transaccion a los argumentos
+            \Epys\Wis\Client::setArgstran($activ->IDEN_ACTIV);
+
             \Epys\Wis\Console::log(([
                 Activtemp => [
                     IDEN_ACTIV => $activ->IDEN_ACTIV,
@@ -113,6 +121,9 @@ class Activtemp
                     IDEN_USERING => $activ->IDEN_USERING
                 ]
             ]));
+
+        }
+
 
         return $activ;
 

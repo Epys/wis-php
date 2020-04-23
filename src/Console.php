@@ -2,6 +2,7 @@
 
 namespace Epys\Wis;
 
+use \DateTime;
 
 class Console
 {
@@ -79,10 +80,10 @@ class Console
             return;
 
         // Formateo mensaje
-        $msgs = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
+        $msgs = ((new DateTime())->format('H:i:s:u')) . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
 
         // Guardo console
-        self::$_console['log'][] = [date("H:i:s") => is_array($msg) ? json_encode($msg) : $msg];
+        self::$_console['log'][] = [((new \DateTime())->format('H:i:s:u')) => is_array($msg) ? json_encode($msg) : $msg];
 
         // Guardo registros
         self::_putContents(self::$_path_logs . date("/Y/m"), $msgs, $codigo);

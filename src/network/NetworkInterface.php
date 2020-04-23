@@ -7,6 +7,8 @@ namespace Epys\Wis\Network;
 interface NetworkInterface
 {
 
+    public function check(): bool;
+
     public function send($provider, $contact, $transac, $content);
 
     public function options($options = ['provider', 'contact', 'transac']);

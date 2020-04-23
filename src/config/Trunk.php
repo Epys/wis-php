@@ -13,9 +13,7 @@ class Trunk
      */
     public static function Get()
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Trunk::Get().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Trunk::Get().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);
@@ -55,11 +53,9 @@ class Trunk
      * Método para crear un proveedor en la base de datos
      * @version 2020-04-14
      */
-    private static function _setProvider()
+    protected static function setProvider()
     {
-
-        //Envio Logs
-        \Epys\Wis\Console::log('Inicio function Trunk::_setProvider().');
+        \Epys\Wis\Console::log('Epys\Wis\Config\Trunk::setProvider().');
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);

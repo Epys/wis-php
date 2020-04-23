@@ -13,7 +13,7 @@ class Schedule
      */
     public static function availableIden($iden)
     {
-
+        \Epys\Wis\Console::log('Epys\Wis\Bot\Schedule::availableIden(' . $iden . ').');
     }
 
 }
