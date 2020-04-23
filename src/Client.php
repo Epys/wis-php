@@ -7,7 +7,7 @@ use Epys\Wis\Network\NetworkInterface;
 class Client
 {
 
-    const VERSION = '0.05.52';
+    const VERSION = '0.12.24';
 
     const BASE_API = 'https://api.wis.cl';
 
@@ -147,7 +147,6 @@ class Client
      */
     public static function setArgstran($tran)
     {
-        return;
         if (self::$args->transac < 1) {
             \Epys\Wis\Console::log('Epys\Wis\Client::setArgstran(' . $tran . ')');
             self::$args->transac = $tran;

@@ -71,8 +71,6 @@ class Init
             if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
                 \Epys\Wis\Bot\Ask::Response();
             } else {
-                // Verifico pregunta pendiente
-                \Epys\Wis\Bot\Ask::Request(\Epys\Wis\Client::$activ->IDEN_ACTIV);
                 // Guardo comentario
                 \Epys\Wis\Flow\Comentario::setComentario();
             }

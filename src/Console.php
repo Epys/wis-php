@@ -91,6 +91,29 @@ class Console
     }
 
     /**
+     * Método que escribe un mensaje en los logs para crons
+     * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
+     * @param msg Mensaje que se desea escribir
+     * @version 2020-04-18
+     */
+    public static function cron($msg = null, $codigo = false)
+    {
+
+        if (!$msg)
+            return;
+
+        // Formateo mensaje
+        $msgs = ((new DateTime())->format('H:i:s:u')) . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
+
+        // Guardo console
+        self::$_console['log'][] = [((new \DateTime())->format('H:i:s:u')) => is_array($msg) ? json_encode($msg) : $msg];
+
+        // Guardo registros
+        self::_putContents(self::$_path_logs . date("/Y/m"), $msgs, $codigo);
+
+    }
+
+    /**
      * Método que escribe un mensaje en los logs pero de formato input (json)
      * @param $codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $json Lo que recepciona PHP en input
