@@ -17,7 +17,16 @@ class Activtemp
         \Epys\Wis\Console::log('Inicio function Activtemp::getContactTecno().');
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'contact', 'trunk']);
+        \Epys\Wis\Client::isLoad(['database']);
+
+        // Valido Troncal
+        if (!\Epys\Wis\Client::$trunk->CODI_TECNO)
+            return [];
+
+        // Valido Contacto
+        if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO)
+            return [];
+
 
         // Si existe actividad pendiente con la troncal
         $activ = \Epys\Wis\Client::$database->where([

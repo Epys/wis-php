@@ -82,7 +82,7 @@ class Console
         $msgs = date("Y-m-d H:i:s") . "\tPID" . getmypid() . "\t\t" . $msg . "\t" . $codigo;
 
         // Guardo console
-        self::$_console['log'][] = [date("H:i:s") => $msg];
+        self::$_console['log'][] = [date("H:i:s") => is_array($msg) ? json_encode($msg) : $msg];
 
         // Guardo registros
         self::_putContents(self::$_path_logs . date("/Y/m"), $msgs, $codigo);

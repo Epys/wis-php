@@ -15,17 +15,17 @@ class Whatsapp implements NetworkInterface
     /**
      * Provider
      */
-    private static $_provider;
+    private static $_provider = false;
 
     /**
      * Contact
      */
-    private static $_contact;
+    private static $_contact = false;
 
     /**
      * Transac
      */
-    private static $_transac;
+    private static $_transac = false;
 
     /**
      * Content
@@ -49,6 +49,19 @@ class Whatsapp implements NetworkInterface
         if ($transac)
             self::transac($transac);
 
+    }
+
+    /**
+     * Método para chequear si esta proveedor y contacto
+     * @version 2020-04-22
+     */
+    public
+    function check(): bool
+    {
+        //Envio Logs
+        \Epys\Wis\Console::log('Inicio function Whatsapp::check(' . ((self::$_provider && self::$_contact) ? true : false) . ').');
+
+        return (self::$_provider && self::$_contact) ? true : false;
     }
 
     /**
@@ -82,6 +95,7 @@ class Whatsapp implements NetworkInterface
             "network" => "whatsapp",
             "type" => "message",
             "direction" => "sent",
+            "transac" => self::$_transac,
             "contact" => ["number" => self::$_contact],
             "content" => self::$_content,
             "provider" => ["number" => self::$_provider]
@@ -105,7 +119,7 @@ class Whatsapp implements NetworkInterface
      * @version 2020-04-20
      */
     public
-    function options($options = [provider => null, contact => null, transac => null])
+    function options($options = ["provider", "contact", "transac"])
     {
         //Envio Logs
         \Epys\Wis\Console::log('Inicio function Whatsapp::options().');

@@ -45,7 +45,7 @@ class Ivr
 
         // Verifico que no exista actividad temporal
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
-            \Epys\Wis\Console::error('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' ya posee una actividad pendiente.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error('El contacto +' . \Epys\Wis\Client::$args->contact->number . ' ya posee una actividad pendiente.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que la troncal tenga un IVR
@@ -58,12 +58,12 @@ class Ivr
 
         // Si no existe ivr elimino conversación y retorno
         if (!$mensaje) {
-            \Epys\Wis\Bot\Conversation::delContactTrunk();
+            \Epys\Wis\Config\Conversation::delContactTrunk();
             \Epys\Wis\Console::log('El IVR ' . $ivr . ' no tiene datos.');
             return;
         }
 
-        \Epys\Wis\Bot\Conversation::setContactTrunk(["IDEN_IVR" => $ivr]);
+        \Epys\Wis\Config\Conversation::setContactTrunk(["IDEN_IVR" => $ivr]);
 
         // Envio Mensaje por Wsap
         \Epys\Wis\Client::$network->text($mensaje)->send();
@@ -120,11 +120,16 @@ class Ivr
 
                     // Valido que el IVR tenga una acción o pregunta
                     if ($ivr->CODI_ACCION) {
-                        \Epys\Wis\Console::log('global/wis/acciones/' . strtolower($ivr->CODI_ACCION));
+
+                        $Action = new \Epys\Wis\Bot\Action();
+                        eval('$Action->run = function () { ' . $Action::blob($ivr->CODI_ACCION) . '};');
+                        $Action->run();
                     }
 
-                    // Pausa por 2 segundos
-                    sleep(2);
+                    // Pausa por 3 segundos
+                    sleep(3);
+
+
 
                 } else {
                     // Envio Mensaje por Wsap
@@ -160,7 +165,6 @@ class Ivr
                 $msj .= $menu->DESC_IVR . PHP_EOL;
 
 
-
         //Envio Logs
         \Epys\Wis\Console::log($msj);
 
@@ -176,7 +180,7 @@ class Ivr
         \Epys\Wis\Console::log('Inicio function Ivr::_volver().');
 
         // Limpio conversacion
-        \Epys\Wis\Bot\Conversation::delContactTrunk();
+        \Epys\Wis\Config\Conversation::delContactTrunk();
 
         // Menu IVR
         $parent = self::iden($iden);
@@ -197,16 +201,18 @@ class Ivr
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database']);
 
-        return \Epys\Wis\Client::$database->where(["IDEN_IVR" => $iden, "ACTIVO" => 1])->get("WI.WIT_IVR")->result()[0];
+        return \Epys\Wis\Client::$database->where(["I.IDEN_IVR" => $iden, "I.ACTIVO" => 1])
+            ->get("WI.WIT_IVR I")->result()[0];
     }
 
     public
-    static function codi($codi)
-    {
-        // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+static function codi($codi)
+{
+    // Verifico que esten cargados los datos
+    \Epys\Wis\Client::isLoad(['database']);
 
-        return \Epys\Wis\Client::$database->where(["CODI_IVR" => $codi, "ACTIVO" => 1])->get("WI.WIT_IVR")->result()[0];
-    }
+    return \Epys\Wis\Client::$database->where(["I.CODI_IVR" => $codi, "I.ACTIVO" => 1])
+        ->get("WI.WIT_IVR I")->result()[0];
+}
 
 }

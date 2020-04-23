@@ -2,13 +2,15 @@
 
 namespace Epys\Wis;
 
+use Epys\Wis\Network\NetworkInterface;
 
 class Client
 {
 
-    const VERSION = '0.11.05';
+    const VERSION = '0.05.52';
 
     const BASE_API = 'https://api.wis.cl';
+
 
     /**
      * Input de PHP
@@ -65,9 +67,7 @@ class Client
     /**
      * @var array
      */
-    protected $options = [
-        'logs' => '' // Path donde se guardan los logs
-    ];
+    protected $options = [];
 
     /**
      * Create a new API client using the provided token.
@@ -219,7 +219,7 @@ class Client
      */
     public static function Conversation()
     {
-        return self::$conversation = \Epys\Wis\Bot\Conversation::getContactTrunk();
+        return self::$conversation = \Epys\Wis\Config\Conversation::getContactTrunk();
     }
 
 

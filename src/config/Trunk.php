@@ -45,7 +45,7 @@ class Trunk
             ]));
 
 
-        return $trunk;
+        return $trunk ? $trunk : [];
 
 
     }

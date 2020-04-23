@@ -19,6 +19,12 @@ class Init
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(['database', 'args']);
 
+        // Busco Actividad pendiente
+        \Epys\Wis\Client::Activ();
+
+        // Busco Conversaciones pendientes
+        \Epys\Wis\Client::Conversation();
+
         // Seteo tipo de mensaje
         switch (\Epys\Wis\Client::$args->direction) {
             case 'received':
@@ -40,8 +46,14 @@ class Init
 
         // Valido Troncal
         \Epys\Wis\Console::log('Valido que exista troncal.');
-        if (!\Epys\Wis\Client::$trunk->CODI_TECNO) {
-            \Epys\Wis\Console::error('La troncal ' . \Epys\Wis\Client::$args->provider->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
+        if (!\Epys\Wis\Client::$trunk->NMRO_TRONCAL) {
+            // Envio mensaje
+            \Epys\Wis\Client::$network
+                ->provider(\Epys\Wis\Client::$args->provider->number)
+                ->contact(\Epys\Wis\Client::$args->contact->number)
+                ->text('La troncal +' . \Epys\Wis\Client::$args->provider->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
+                ->send();
+            \Epys\Wis\Console::error('La troncal +' . \Epys\Wis\Client::$args->provider->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Valido Contacto
@@ -52,7 +64,7 @@ class Init
             \Epys\Wis\Client::$network
                 ->provider(\Epys\Wis\Client::$args->provider->number)
                 ->contact(\Epys\Wis\Client::$args->contact->number)
-                ->text('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
+                ->text('El contacto +' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
                 ->send();
 
             \Epys\Wis\Console::error('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);

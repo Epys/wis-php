@@ -36,7 +36,7 @@ class Contact
                 ]
             ]));
 
-        return $contacto;
+        return $contacto ? $contacto : [];
 
     }
 
