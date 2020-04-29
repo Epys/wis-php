@@ -14,10 +14,10 @@ class Contact
      */
     public static function Get()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Contact::Get().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Contact::Get().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         // Busco contacto
         $contacto = \Epys\Wis\Client::$database->select("*, PA.DESC_EMPRESA(CODI_EMPRESA) DESC_EMPRESA, PA.DESC_ZONA(CODI_ZONA) DESC_ZONA", false)
@@ -27,12 +27,10 @@ class Contact
         //Envio Logs
         if ($contacto)
             \Epys\Wis\Console::log(([
-                Contact => [
                     NMRO_CONTACTO => $contacto->NMRO_CONTACTO,
                     IDEN_CONTACTO => $contacto->IDEN_CONTACTO,
                     CODI_ZONA => $contacto->CODI_ZONA,
                     ACTIVO => $contacto->ACTIVO
-                ]
             ]));
 
         return $contacto ? $contacto : [];
@@ -46,12 +44,12 @@ class Contact
      */
     protected static function setContact()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Contact::setContact().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Contact::setContact().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
-        \Epys\Wis\Client::$database->insert('WI.WIT_CONTACT', [
+        \Epys\Wis\Client::$database->insert("WI.WIT_CONTACT", [
             NMRO_CONTACTO => \Epys\Wis\Client::$args->contact->number,
             DESC_CONTACTO => \Epys\Wis\Client::$args->contact->name,
             ACTIVO => 0

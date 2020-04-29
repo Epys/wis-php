@@ -12,10 +12,10 @@ class Activtemp
      */
     public static function getContactTecno()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getContactTecno().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Activtemp::getContactTecno().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         // Valido Troncal
         if (!\Epys\Wis\Client::$trunk->CODI_TECNO)
@@ -58,10 +58,10 @@ class Activtemp
      */
     public static function getContact()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getContact().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Activtemp::getContact().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args', 'contact']);
+        \Epys\Wis\Client::isLoad(["database", "args", "contact"]);
 
         // Si existe actividad pendiente con la troncal
         $activ = \Epys\Wis\Client::$database->where([
@@ -97,10 +97,10 @@ class Activtemp
      */
     public static function getActiv($iden)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Activtemp::getActiv(' . $iden . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Activtemp::getActiv(" . $iden . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         // Si existe actividad pendiente con la troncal
         $activ = \Epys\Wis\Client::$database->where([

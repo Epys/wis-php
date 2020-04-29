@@ -14,10 +14,10 @@ class Ask
      */
     public static function Response()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ask::Response().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::Response().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args', 'activ', 'conversation']);
+        \Epys\Wis\Client::isLoad(["database", "args", "conversation"]);
 
         // Valido que el IVR tenga una acción o pregunta
         if (\Epys\Wis\Client::$conversation->CODI_ACCION) {
@@ -38,10 +38,10 @@ class Ask
      */
     public static function Request($iden = false)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ask::Request(' . $iden . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::Request(" . $iden . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         if (!$iden) {
             // Busco Actividad pendiente asociadas al número que venía en args
@@ -63,11 +63,12 @@ class Ask
                     ->text($pregunta->DESC_PREGUNTA)
                     ->send();
 
+                // Guardo mensaje
+                \Epys\Wis\Flow\Comentario::setBot($iden, $pregunta->DESC_PREGUNTA);
+
             }
 
     }
-
-
 
 
     /**
@@ -76,14 +77,15 @@ class Ask
      */
     public static function getPregIden($iden)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ask::getPregIden(' . $iden . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::getPregIden(" . $iden . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
+        // Busco Preguntas que se ejecuten en pendiente
         $preg = \Epys\Wis\Client::$database
             ->select("P.*")
-            ->where("A.IDEN_TRANSAC", $iden)
+            ->where(["A.IDEN_TRANSAC"=> $iden, "P.CODI_ESTADO" => 'PEND'])
             ->where("P.CODI_PREGUNTA NOT IN (SELECT CODI_PREGUNTA FROM WI.WIT_RESPUESTA WHERE IDEN_ACTIV = A.IDEN_TRANSAC) AND P.ACTIVO = 1")
             ->join("WI.WIT_PREGXTIPO T", "T.CODI_PREGUNTA = P.CODI_PREGUNTA")
             ->join("SU.SUT_TRANSAC A", "A.IDEN_TIPOACTIV = T.IDEN_TIPOACTIV")
@@ -104,10 +106,10 @@ class Ask
      */
     public static function getPregContact($number)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ask::getPregContact(' . $number . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::getPregContact(" . $number . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
     }
 
@@ -115,10 +117,10 @@ class Ask
     public
     static function codi($codi)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ask::codi(' . $codi . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::codi(" . $codi . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         return \Epys\Wis\Client::$database->where(["CODI_PREGUNTA" => $codi, "ACTIVO" => 1])
             ->get("WI.WIT_PREGUNTA")->result()[0];

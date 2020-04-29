@@ -4,13 +4,15 @@
 namespace Epys\Wis\Network;
 
 
+use DateTime;
+
 class Whatsapp implements NetworkInterface
 {
 
     /**
      * Provider
      */
-    const URL = \Epys\Wis\Client::BASE_API . '/whatsapp/send';
+    const URL = \Epys\Wis\Client::BASE_API . "/whatsapp/send";
 
     /**
      * Provider
@@ -37,7 +39,7 @@ class Whatsapp implements NetworkInterface
      */
     public function __construct($provider = null, $contact = null, $transac = null)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::__construct().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::__construct().");
 
         if ($provider)
             self::provider($provider);
@@ -57,7 +59,7 @@ class Whatsapp implements NetworkInterface
     public
     function check(): bool
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::check(' . ((self::$_provider && self::$_contact) ? true : false) . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::check(" . ((self::$_provider && self::$_contact) ? true : false) . ").");
 
         return (self::$_provider && self::$_contact) ? true : false;
     }
@@ -69,7 +71,7 @@ class Whatsapp implements NetworkInterface
     public
     function send($provider = null, $contact = null, $transac = null, $content = null)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::send().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::send().");
 
         if ($provider)
             self::provider($provider);
@@ -81,10 +83,10 @@ class Whatsapp implements NetworkInterface
             self::transac($transac);
 
         if (!self::$_contact)
-            \Epys\Wis\Console::error('No esta definido el número de contacto.', \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("No esta definido el número de contacto.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
 
         if (!self::$_provider)
-            \Epys\Wis\Console::error('No esta definido el número de proveedor.', \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("No esta definido el número de proveedor.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
 
         $json = [
             "id" => self::clientid(),
@@ -98,14 +100,8 @@ class Whatsapp implements NetworkInterface
             "provider" => ["number" => self::$_provider]
         ];
 
-        //Envio Logs
-        \Epys\Wis\Console::log($json);
-
         // Retorno resultado
         $result = \Epys\Wis\Http\Service::POST(self::URL, $json);
-
-        //Envio Logs
-        \Epys\Wis\Console::log($result);
 
         return $result;
 
@@ -118,16 +114,16 @@ class Whatsapp implements NetworkInterface
     public
     function options($options = ["provider", "contact", "transac"])
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::options().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::options().");
 
-        if ($options['provider'])
-            self::provider($options['provider']);
+        if ($options["provider"])
+            self::provider($options["provider"]);
 
-        if ($options['contact'])
-            self::contact($options['contact']);
+        if ($options["contact"])
+            self::contact($options["contact"]);
 
-        if ($options['transac'])
-            self::transac($options['transac']);
+        if ($options["transac"])
+            self::transac($options["transac"]);
 
         // Retorno Clase
         return $this;
@@ -140,7 +136,11 @@ class Whatsapp implements NetworkInterface
     public
     function provider($provider)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::provider(' . $provider . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::provider(" . $provider . ").");
+
+        // Valido que sea numerico
+        if (!is_numeric($provider))
+            return;
 
         // Defino proveedor
         self::$_provider = $provider;
@@ -156,7 +156,11 @@ class Whatsapp implements NetworkInterface
     public
     function contact($contact)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::contact(' . $contact . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::contact(" . $contact . ").");
+
+        // Valido que sea numerico
+        if (!is_numeric($contact))
+            return;
 
         // Defino contacto
         self::$_contact = $contact;
@@ -172,7 +176,7 @@ class Whatsapp implements NetworkInterface
     public
     function transac($transac)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::transac(' . $transac . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::transac(" . $transac . ").");
 
         // Defino transac
         self::$_transac = $transac;
@@ -188,7 +192,7 @@ class Whatsapp implements NetworkInterface
     public
     function text($text)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::text().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::text().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Text::Normalize($text);
 
@@ -203,7 +207,7 @@ class Whatsapp implements NetworkInterface
     public
     function image($file, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::image().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::image().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Image::Normalize($file, $caption);
 
@@ -218,7 +222,7 @@ class Whatsapp implements NetworkInterface
     public
     function stiker($file, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::stiker().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::stiker().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Stiker::Normalize($file, $caption);
 
@@ -233,7 +237,7 @@ class Whatsapp implements NetworkInterface
     public
     function document($file, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::document().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::document().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Document::Normalize($file, $caption);
 
@@ -248,7 +252,7 @@ class Whatsapp implements NetworkInterface
     public
     function audio($file, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::audio().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::audio().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Audio::Normalize($file, $caption);
 
@@ -263,7 +267,7 @@ class Whatsapp implements NetworkInterface
     public
     function video($file, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::video().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::video().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Video::Normalize($file, $caption);
 
@@ -278,7 +282,7 @@ class Whatsapp implements NetworkInterface
     public
     function location($latitude, $longitude, $caption)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::location().');
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::location().");
 
         self::$_content = \Epys\Wis\Network\Whatsapp\Location::Normalize($latitude, $longitude, $caption);
 
@@ -293,9 +297,10 @@ class Whatsapp implements NetworkInterface
     protected
     static function clientid()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Network\Whatsapp::clientid().');
+        $id = (new DateTime())->format("ynjGisu");
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::clientid(" . $id . ").");
 
-        return hexdec(uniqid());
+        return $id;
     }
 
 }

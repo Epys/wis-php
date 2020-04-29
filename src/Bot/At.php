@@ -16,22 +16,22 @@
 \Epys\Wis\Client::isLoad(["database", "args", "contact", "trunk", "conversation"]);
 
 // Valido que sea mensaje
-if (\Epys\Wis\Client::$args->type != 'message' || \Epys\Wis\Client::$args->direction != 'received')
-    \Epys\Wis\Console::error('El tipo de args no es correcto.', \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
+if (\Epys\Wis\Client::$args->type != "message" || \Epys\Wis\Client::$args->direction != "received")
+    \Epys\Wis\Console::error("El tipo de args no es correcto.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
 
 // Valido que la respuesta sea texto
-if (\Epys\Wis\Client::$args->content->type != 'text') {
+if (\Epys\Wis\Client::$args->content->type != "text") {
     // Envio respuesta
     if (\Epys\Wis\Client::$network->check())
-        \Epys\Wis\Client::$network->text('La respuesta debe ser texto.')->send();
+        \Epys\Wis\Client::$network->text("La respuesta debe ser texto.")->send();
 
     //Error
-    \Epys\Wis\Console::error('La respuesta debe ser texto.', \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
+    \Epys\Wis\Console::error("La respuesta debe ser texto.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
 }
 
 // Valido que la respuesta sea texto
 if (!\Epys\Wis\Client::$conversation->RGXP_MATCH)
-    \Epys\Wis\Console::error('La pregunta `' . \Epys\Wis\Client::$conversation->DESC_PREGUNTA . '` no tiene un patron asociado.', \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
+    \Epys\Wis\Console::error("La pregunta `" . \Epys\Wis\Client::$conversation->DESC_PREGUNTA . "` no tiene un patron asociado.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
 
 
 // Asigno respuesta

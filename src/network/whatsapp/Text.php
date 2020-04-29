@@ -16,7 +16,7 @@ class Text
         $text = \Epys\Wis\Network\Replace::strtr($text);
 
         // Retorno texto
-        return ['type' => 'text', 'text' => $text];
+        return ["type" => "text", "text" => $text];
 
     }
 }

@@ -12,10 +12,10 @@ class Ivr
      */
     public static function Init()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Init().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::Init().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         // Valido
         if (\Epys\Wis\Client::$conversation->CODI_IVR) {
@@ -33,7 +33,7 @@ class Ivr
      */
     protected static function Pregunta($ivr = false)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Pregunta().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::Pregunta().");
 
         // Si no envio IVR, per defecto es el de la troncal
         if (!$ivr)
@@ -42,12 +42,12 @@ class Ivr
 
         // Verifico que no exista actividad temporal
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
-            \Epys\Wis\Console::error('El contacto +' . \Epys\Wis\Client::$args->contact->number . ' ya posee una actividad pendiente.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("El contacto +" . \Epys\Wis\Client::$args->contact->number . " ya posee una actividad pendiente.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que la troncal tenga un IVR
         if (!$ivr) {
-            \Epys\Wis\Console::error('No podemos identificar el IVR asociado.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("No podemos identificar el IVR asociado.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Genero IVR
@@ -56,7 +56,7 @@ class Ivr
         // Si no existe ivr elimino conversación y retorno
         if (!$mensaje) {
             \Epys\Wis\Config\Conversation::delContactTrunk();
-            \Epys\Wis\Console::log('El IVR ' . $ivr . ' no tiene datos.');
+            \Epys\Wis\Console::log("El IVR " . $ivr . " no tiene datos.");
             return;
         }
 
@@ -71,26 +71,26 @@ class Ivr
      */
     protected static function Respuesta()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::Respuesta().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::Respuesta().");
 
         // Verifico que la troncal tenga un IVR
         if (!\Epys\Wis\Client::$conversation->IDEN_IVR) {
-            \Epys\Wis\Console::error('La troncal ' . \Epys\Wis\Client::$args->provider->number . ' no tiene un IVR asociado.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("La troncal " . \Epys\Wis\Client::$args->provider->number . " no tiene un IVR asociado.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que el IVR tenga REGXP
         if (!\Epys\Wis\Client::$conversation->RGXP_MATCH) {
-            \Epys\Wis\Console::error('El IVR ' . \Epys\Wis\Client::$conversation->DESC_IVR . '´ no tiene un patrón asociado.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("El IVR " . \Epys\Wis\Client::$conversation->DESC_IVR . "´ no tiene un patrón asociado.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que el IVR tenga REGXP
-        if (\Epys\Wis\Client::$args->content->type !== 'text') {
-            \Epys\Wis\Console::error('La respuesta debe ser texto [' . \Epys\Wis\Client::$args->content->type . '].', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+        if (\Epys\Wis\Client::$args->content->type !== "text") {
+            \Epys\Wis\Console::error("La respuesta debe ser texto [" . \Epys\Wis\Client::$args->content->type . "].", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
 
         //Valido que cumpla con regxp
-        \Epys\Wis\Console::log(\Epys\Wis\Client::$conversation->RGXP_MATCH . ' <-> ' . \Epys\Wis\Client::$args->content->text);
+        \Epys\Wis\Console::log(\Epys\Wis\Client::$conversation->RGXP_MATCH . " <-> " . \Epys\Wis\Client::$args->content->text);
         preg_match(\Epys\Wis\Client::$conversation->RGXP_MATCH, \Epys\Wis\Client::$args->content->text, $respuesta);
         if (isset($respuesta[0])) {
 
@@ -141,7 +141,7 @@ class Ivr
     protected
     static function generar($parent = false)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::generar(' . $parent . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::generar(" . $parent . ").");
 
         if (!$parent)
             return;
@@ -166,7 +166,7 @@ class Ivr
     private
     static function volver($iden)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::volver(' . $iden . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::volver(" . $iden . ").");
 
         // Limpio conversacion
         \Epys\Wis\Config\Conversation::delContactTrunk();
@@ -175,7 +175,7 @@ class Ivr
         $parent = self::iden($iden);
 
         // Ejecuto IVR
-        if ($parent->IDEN_PARENT == '0') {
+        if ($parent->IDEN_PARENT == "0") {
             self::Pregunta($iden);
         } else {
             self::Pregunta($parent->IDEN_PARENT);
@@ -187,10 +187,10 @@ class Ivr
     public
     static function iden($iden)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::iden(' . $iden . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::iden(" . $iden . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         return \Epys\Wis\Client::$database->where(["I.IDEN_IVR" => $iden, "I.ACTIVO" => 1])
             ->get("WI.WIT_IVR I")->result()[0];
@@ -199,10 +199,10 @@ class Ivr
     public
     static function codi($codi)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Ivr::codi(' . $codi . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Ivr::codi(" . $codi . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         return \Epys\Wis\Client::$database->where(["I.CODI_IVR" => $codi, "I.ACTIVO" => 1])
             ->get("WI.WIT_IVR I")->result()[0];

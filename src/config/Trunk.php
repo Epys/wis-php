@@ -13,10 +13,10 @@ class Trunk
      */
     public static function Get()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Trunk::Get().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Trunk::Get().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         $trunk = false;
 
@@ -32,14 +32,12 @@ class Trunk
         //Envio Logs
         if ($trunk)
             \Epys\Wis\Console::log(([
-                Trunk => [
                     NMRO_TRONCAL => $trunk->NMRO_TRONCAL,
                     CODI_ZONA => $trunk->CODI_ZONA,
                     CODI_TECNO => $trunk->CODI_TECNO,
                     IDEN_IVR => $trunk->IDEN_IVR,
                     FLAG_BLANCA => $trunk->FLAG_BLANCA,
                     ACTIVO => $trunk->ACTIVO
-                ]
             ]));
 
 
@@ -55,15 +53,15 @@ class Trunk
      */
     protected static function setProvider()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Trunk::setProvider().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Trunk::setProvider().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
-        \Epys\Wis\Client::$database->insert('WI.WIT_TRONCAL', [
+        \Epys\Wis\Client::$database->insert("WI.WIT_TRONCAL", [
             NMRO_TRONCAL => \Epys\Wis\Client::$args->provider->number,
             DESC_TRONCAL => \Epys\Wis\Client::$args->provider->number,
-            CODI_ZONA => 'XXXX',
+            CODI_ZONA => "XXXX",
             ACTIVO => 0
         ]);
 

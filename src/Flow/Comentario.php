@@ -13,40 +13,40 @@ class Comentario
      */
     public static function setComentario()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::setComentario().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::setComentario().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args', 'contact']);
+        \Epys\Wis\Client::isLoad(["database", "args", "contact"]);
 
         // Valido transac
         if (!\Epys\Wis\Client::$args->transac) {
-            \Epys\Wis\Console::error('El objeto transac no es valido.', \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT,__CLASS__,__LINE__);
+            \Epys\Wis\Console::error("El objeto transac no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
         }
 
         // Valido que sea un mensaje
-        if (\Epys\Wis\Client::$args->type == 'message') {
+        if (\Epys\Wis\Client::$args->type == "message") {
 
-            \Epys\Wis\Console::log('Verifico typo de documento.');
+            \Epys\Wis\Console::log("Verifico typo de documento.");
             switch (\Epys\Wis\Client::$args->content->type) {
-                case 'text':
+                case "text":
                     self::text();
                     break;
-                case 'image':
+                case "image":
                     self::image();
                     break;
-                case 'sticker':
+                case "sticker":
                     self::sticker();
                     break;
-                case 'audio':
+                case "audio":
                     self::audio();
                     break;
-                case 'video':
+                case "video":
                     self::video();
                     break;
-                case 'document':
+                case "document":
                     self::document();
                     break;
-                case 'location':
+                case "location":
                     self::location();
                     break;
             }
@@ -55,12 +55,13 @@ class Comentario
                 "IDEN_USUARIO" => \Epys\Wis\Client::$contact->IDEN_CONTACTO,
                 "IDEN_TRANSAC" => \Epys\Wis\Client::$args->transac,
                 "FECH_COMENTARIO" => \Epys\Wis\Client::$args->time,
-                "DESC_COMENTARIO" => \Epys\Wis\Client::$args->content->text,
+                "DESC_COMENTARIO" => substr(json_encode(\Epys\Wis\Client::$args->content->text), 1, -1),
+                "CODI_DIRECCION" => \Epys\Wis\Client::$args->direction,
                 "NMRO_LATITUDE" => \Epys\Wis\Client::$args->content->latitude,
                 "NMRO_LONGITUDE" => \Epys\Wis\Client::$args->content->longitude,
                 "FLAG_URL" => \Epys\Wis\Client::$args->content->url,
                 "FLAG_MIME" => \Epys\Wis\Client::$args->content->mime,
-                "FLAG_TYPE" => \Epys\Wis\Client::$args->type,
+                "FLAG_TYPE" => \Epys\Wis\Client::$args->content->type,
                 "FLAG_ACKID" => \Epys\Wis\Client::$args->id,
                 "THUMB" => \Epys\Wis\Client::$args->content->thumb
             ];
@@ -79,46 +80,76 @@ class Comentario
 
     }
 
+    /**
+     * Método para buscar actividades pendientes por contacto
+     * @version 2020-04-23
+     */
+    public static function setBot($iden, $text)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::setBot().");
+
+        // Verifico que esten cargados los datos
+        \Epys\Wis\Client::isLoad(["database"]);
+
+
+        $comentario = [
+            "IDEN_USUARIO" => '000000000001',
+            "IDEN_TRANSAC" => $iden,
+            "FECH_COMENTARIO" => round(microtime(true) * 1000),
+            "DESC_COMENTARIO" => substr(json_encode($text), 1, -1),
+            "CODI_DIRECCION" => "sent"
+        ];
+
+        // Guardo comentario
+        \Epys\Wis\Client::$database->insert("SU.SUT_COMENTARIO", $comentario);
+
+        \Epys\Wis\Console::log(([
+            sutComentario => array_filter($comentario)
+        ]));
+
+
+    }
+
     protected
     static function text()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::text().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::text().");
     }
 
     protected
     static function image()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::image().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::image().");
     }
 
     protected
     static function sticker()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::sticker().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::sticker().");
     }
 
     protected
     static function audio()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::audio().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::audio().");
     }
 
     protected
     static function video()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::video().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::video().");
     }
 
     protected
     static function document()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::document().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::document().");
     }
 
     protected
     static function location()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Flow\Comentario::location().');
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::location().");
     }
 
 }

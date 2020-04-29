@@ -11,7 +11,7 @@ interface NetworkInterface
 
     public function send($provider, $contact, $transac, $content);
 
-    public function options($options = ['provider', 'contact', 'transac']);
+    public function options($options = ["provider", "contact", "transac"]);
 
     public function provider($provider);
 

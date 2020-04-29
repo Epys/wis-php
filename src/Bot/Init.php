@@ -12,10 +12,10 @@ class Init
      */
     public function __construct()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::__construct().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Init::__construct().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'args']);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         // Busco Actividad pendiente
         \Epys\Wis\Client::Activ();
@@ -25,10 +25,10 @@ class Init
 
         // Seteo tipo de mensaje
         switch (\Epys\Wis\Client::$args->direction) {
-            case 'received':
+            case "received":
                 self::received();
                 break;
-            case 'sent':
+            case "sent":
                 self::sent();
                 break;
         }
@@ -41,16 +41,16 @@ class Init
      */
     protected static function received()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::received().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received().");
 
         // Valido Troncal
         if (!\Epys\Wis\Client::$trunk->NMRO_TRONCAL) {
             \Epys\Wis\Client::$network
                 ->provider(\Epys\Wis\Client::$args->provider->number)
                 ->contact(\Epys\Wis\Client::$args->contact->number)
-                ->text('La troncal +' . \Epys\Wis\Client::$args->provider->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
+                ->text("La troncal +" . \Epys\Wis\Client::$args->provider->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
                 ->send();
-            \Epys\Wis\Console::error('La troncal +' . \Epys\Wis\Client::$args->provider->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
+            \Epys\Wis\Console::error("La troncal +" . \Epys\Wis\Client::$args->provider->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Valido Contacto
@@ -58,30 +58,26 @@ class Init
             \Epys\Wis\Client::$network
                 ->provider(\Epys\Wis\Client::$args->provider->number)
                 ->contact(\Epys\Wis\Client::$args->contact->number)
-                ->text('El contacto +' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.')
+                ->text("El contacto +" . \Epys\Wis\Client::$args->contact->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
                 ->send();
-            \Epys\Wis\Console::error('El contacto ' . \Epys\Wis\Client::$args->contact->number . ' no existe en nuestra base de datos. Contacte al administrador de Wis.', \Epys\Wis\Console::ERROR_INPUT);
+            \Epys\Wis\Console::error("El contacto " . \Epys\Wis\Client::$args->contact->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Verifico si hay actividades Pendientes
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
 
-            \Epys\Wis\Console::log('Epys\Wis\Bot\Init::received() IDEN_ACTIV[' . \Epys\Wis\Client::$activ->IDEN_ACTIV . '].');
+            \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received() IDEN_ACTIV[" . \Epys\Wis\Client::$activ->IDEN_ACTIV . "].");
 
-            if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
+            \Epys\Wis\Flow\Comentario::setComentario();
+
+            if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA)
                 \Epys\Wis\Bot\Ask::Response();
-            } else {
-                // Guardo comentario
-                \Epys\Wis\Flow\Comentario::setComentario();
-            }
 
         } else {
 
             if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA) {
-
                 // Respondo pregunta
                 \Epys\Wis\Bot\Ask::Response(\Epys\Wis\Client::$conversation->IDEN_ACTIV);
-
             } else {
 
                 // Genero IVR
@@ -98,7 +94,7 @@ class Init
      */
     protected static function sent()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Init::sent().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Init::sent().");
 
     }
 }

@@ -2,14 +2,13 @@
 
 namespace Epys\Wis;
 
-use Epys\Wis\Network\NetworkInterface;
 
 class Client
 {
 
-    const VERSION = '0.12.24';
+    const VERSION = "0.19.49";
 
-    const BASE_API = 'https://api.wis.cl';
+    const BASE_API = "https://api.wis.cl";
 
 
     /**
@@ -74,17 +73,21 @@ class Client
      */
     public function __construct($token = false, $options = [])
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::__construct().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::__construct().");
 
         $this->options = $options;
 
         // Path de logs
-        if (isset($options['logs']))
-            \Epys\Wis\Console::setPath($options['logs']);
+        if (isset($options["logs"]))
+            \Epys\Wis\Console::setPath($options["logs"]);
 
         // Base de datos
-        if (isset($options['database']))
-            self::setDatabase($options['database']);
+        if (isset($options["database"]))
+            self::setDatabase($options["database"]);
+
+        // Base de datos
+        if (isset($options["network"]))
+            self::setNetwork($options["network"]);
 
         // Defino Token
         if ($token)
@@ -94,7 +97,7 @@ class Client
 
     function __destruct()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::__destruct().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::__destruct().");
         \Epys\Wis\Console::destruct();
     }
 
@@ -106,7 +109,7 @@ class Client
      */
     public static function setToken($token)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::setToken(' . $token . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Client::setToken(" . $token . ").");
         self::$token = $token;
 
     }
@@ -117,7 +120,7 @@ class Client
      */
     public static function setDatabase($db)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::setDatabase().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::setDatabase().");
         self::$database = $db;
     }
 
@@ -127,7 +130,7 @@ class Client
      */
     public static function setIvr($ivr)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::setIvr().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::setIvr().");
         self::$ivr = $ivr;
     }
 
@@ -137,7 +140,7 @@ class Client
      */
     public static function setAsk($ask)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::setAsk().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::setAsk().");
         self::$ask = $ask;
     }
 
@@ -148,7 +151,7 @@ class Client
     public static function setArgstran($tran)
     {
         if (self::$args->transac < 1) {
-            \Epys\Wis\Console::log('Epys\Wis\Client::setArgstran(' . $tran . ')');
+            \Epys\Wis\Console::log("Epys\Wis\Client::setArgstran(" . $tran . ")");
             self::$args->transac = $tran;
         }
     }
@@ -159,13 +162,26 @@ class Client
      */
     public static function Normalize()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::Normalize().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Normalize().");
 
         self::$args = Config\Normalize::Input();
 
-        // Seteo Network
-        switch (self::$args->network) {
-            case 'whatsapp':
+        self::setNetwork(self::$args->network, [
+            self::$args->provider->number,
+            self::$args->contact->number
+        ]);
+    }
+
+    /**
+     * Funcion para definir network
+     * @version 2020-04-17
+     */
+    public static function setNetwork($net, $config = ["provider", "contact"])
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Client::setNetwork(" . $net . ").");
+
+        switch ($net) {
+            case "whatsapp":
                 self::$network = new \Epys\Wis\Network\Whatsapp(
                     self::$args->provider->number,
                     self::$args->contact->number
@@ -181,7 +197,7 @@ class Client
     public static function isType()
     {
         if (!self::$args->type)
-            \Epys\Wis\Console::error('El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.', \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.", \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
 
         // Retorno datos
         return self::$args->type;
@@ -195,7 +211,7 @@ class Client
     {
         foreach ($arr as $variable) {
             if (!self::${$variable})
-                \Epys\Wis\Console::error('El objeto `self::$' . $variable . '` no esta definido.', \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+                \Epys\Wis\Console::error("El objeto `self::$" . $variable . "` no esta definido.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
     }
 
@@ -205,7 +221,7 @@ class Client
      */
     public static function Contact()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::Contact().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Contact().");
         return self::$contact = \Epys\Wis\Config\Contact::Get();
     }
 
@@ -216,7 +232,7 @@ class Client
      */
     public static function Trunk()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::Trunk().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Trunk().");
         return self::$trunk = \Epys\Wis\Config\Trunk::Get();
     }
 
@@ -227,7 +243,7 @@ class Client
      */
     public static function Activ()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::Activ().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Activ().");
         return self::$activ = \Epys\Wis\Flow\Activtemp::getContactTecno();
     }
 
@@ -238,7 +254,7 @@ class Client
      */
     public static function Conversation()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Client::Conversation().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Conversation().");
         return self::$conversation = \Epys\Wis\Config\Conversation::getContactTrunk();
     }
 
@@ -250,7 +266,7 @@ class Client
     public static function Bot()
     {
 
-        \Epys\Wis\Console::log('Epys\Wis\Client::Bot().');
+        \Epys\Wis\Console::log("Epys\Wis\Client::Bot().");
 
         // Inizializo Bot
         new \Epys\Wis\Bot\Init();

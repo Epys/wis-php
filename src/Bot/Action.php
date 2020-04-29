@@ -12,7 +12,7 @@ class Action
      */
     public function __construct()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Action::__construct().');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::__construct().");
     }
 
     /**
@@ -20,7 +20,7 @@ class Action
      */
     public function __call($method, $args)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Action::__call(' . $method . ', ' . $args . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::__call(" . $method . ", " . $args . ").");
 
         if (isset($this->$method)) {
             $func = $this->$method;
@@ -31,10 +31,10 @@ class Action
     public
     static function codi($codi)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Action::codi(' . $codi . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::codi(" . $codi . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         return \Epys\Wis\Client::$database->where(["CODI_ACCION" => $codi, "ACTIVO" => 1])
             ->get("WI.WIT_ACCION")->result()[0];
@@ -44,10 +44,10 @@ class Action
     public
     static function blob($codi)
     {
-        \Epys\Wis\Console::log('Epys\Wis\Bot\Action::blob(' . $codi . ').');
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::blob(" . $codi . ").");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         return (self::codi($codi))->BLOB_ACCION;
 

@@ -10,8 +10,10 @@ class Stiker
      * Método para normalizar y pasar a json
      * @version 2020-04-20
      */
-    public static function Normalize($model)
+    public static function Normalize($url, $caption)
     {
+
+        return ["type" => "stiker", "url" => $url, "caption" => $caption];
 
     }
 }

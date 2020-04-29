@@ -13,10 +13,10 @@ class Conversation
      */
     public static function getContactTrunk()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::getContactTrunk().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Conversation::getContactTrunk().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database']);
+        \Epys\Wis\Client::isLoad(["database"]);
 
         // Valido Troncal
         if (!\Epys\Wis\Client::$trunk->CODI_TECNO)
@@ -76,10 +76,10 @@ class Conversation
      */
     public static function delContactTrunk()
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::delContactTrunk().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Conversation::delContactTrunk().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'contact', 'trunk']);
+        \Epys\Wis\Client::isLoad(["database", "contact", "trunk"]);
 
         // Busco si hay alguna pregunta en el la tabla conversación
         return \Epys\Wis\Client::$database
@@ -96,10 +96,10 @@ class Conversation
      */
     public static function setContactTrunk($option = ["IDEN_IVR", "CODI_PREGUNTA", "IDEN_ACTIV"])
     {
-        \Epys\Wis\Console::log('Epys\Wis\Config\Conversation::setContactTrunk().');
+        \Epys\Wis\Console::log("Epys\Wis\Config\Conversation::setContactTrunk().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(['database', 'contact', 'trunk']);
+        \Epys\Wis\Client::isLoad(["database", "contact", "trunk"]);
 
         // Busco si hay alguna pregunta en el la tabla conversación
         return \Epys\Wis\Client::$database
