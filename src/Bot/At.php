@@ -16,7 +16,7 @@
 \Epys\Wis\Client::isLoad(["database", "args", "contact", "trunk", "conversation"]);
 
 // Valido que sea mensaje
-if (\Epys\Wis\Client::$args->type != "message" || \Epys\Wis\Client::$args->message->direction != "received")
+if (\Epys\Wis\Client::$args->message || \Epys\Wis\Client::$args->message->direction != "received")
     \Epys\Wis\Console::error("El tipo de args no es correcto.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
 
 // Valido que la respuesta sea texto

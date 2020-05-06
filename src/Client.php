@@ -93,6 +93,12 @@ class Client
         if (isset($options["network"]))
             self::setNetwork($options["network"]);
 
+        // Base de datos
+        if (isset($options["google"])) {
+            if ($options["google"]["messaging"])
+                \Epys\Wis\Google\Messaging::setToken($options["google"]["messaging"]);
+        }
+
         // Defino Token
         if ($token)
             self::setToken($token);

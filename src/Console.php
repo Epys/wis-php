@@ -210,7 +210,7 @@ class Console
             "line" => $line,
             "code" => $codigo,
             "error" => $msg,
-            "logs" => self::$_console["log"],
+            // "logs" => self::$_console["log"],
             "input" => self::$_console["input"]
         ], function ($value) {
             return !is_null($value) && $value !== "";
@@ -267,10 +267,10 @@ class Console
      */
     public static function debug()
     {
-        $obj = array_filter(self::$_console, function ($value) {
+        $obj = array_filter(self::$_console["log"], function ($value) {
             return !is_null($value) && $value !== "";
         });
-
+        
         header("Content-Type:application/json");
         die(json_encode($obj));
     }

@@ -24,7 +24,7 @@ class Comentario
         }
 
         // Valido que sea un mensaje
-        if (\Epys\Wis\Client::$args->type == "message") {
+        if (\Epys\Wis\Client::$args->message) {
 
             \Epys\Wis\Console::log("Verifico typo de documento.");
             switch (\Epys\Wis\Client::$args->message->content->type) {
@@ -54,7 +54,7 @@ class Comentario
             $comentario = [
                 "IDEN_USUARIO" => \Epys\Wis\Client::$contact->IDEN_CONTACTO,
                 "IDEN_TRANSAC" => \Epys\Wis\Client::$args->transac,
-                "FECH_COMENTARIO" => \Epys\Wis\Client::$args->time,
+                "FECH_COMENTARIO" => \Epys\Wis\Client::$args->message->time,
                 "DESC_COMENTARIO" => substr(json_encode(\Epys\Wis\Client::$args->message->content->text), 1, -1),
                 "CODI_DIRECCION" => \Epys\Wis\Client::$args->message->direction,
                 "NMRO_LATITUDE" => \Epys\Wis\Client::$args->message->content->latitude,
@@ -62,7 +62,7 @@ class Comentario
                 "FLAG_URL" => \Epys\Wis\Client::$args->message->content->url,
                 "FLAG_MIME" => \Epys\Wis\Client::$args->message->content->mime,
                 "FLAG_TYPE" => \Epys\Wis\Client::$args->message->content->type,
-                "FLAG_ACKID" => \Epys\Wis\Client::$args->id,
+                "FLAG_ACKID" => \Epys\Wis\Client::$args->message->id,
                 "THUMB" => \Epys\Wis\Client::$args->message->content->thumb
             ];
 
@@ -73,8 +73,9 @@ class Comentario
                 sutComentario => array_filter($comentario)
             ]));
 
-            // Envio notificación al usuario
-            //\Epys\Wis\Google\Messaging();
+            if (\Epys\Wis\Client::$args->message->direction == "received" && \Epys\Wis\Client::$args->transac > 1) {
+                self::messaging(\Epys\Wis\Client::$args->transac);
+            }
 
         }
 
@@ -107,6 +108,32 @@ class Comentario
             sutComentario => array_filter($comentario)
         ]));
 
+
+    }
+
+    protected
+    static function messaging($transac)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::messaging().");
+
+        $tran = \Epys\Wis\Client::$database
+            ->select("*")
+            ->where(["T.IDEN_TRANSAC" => $transac])
+            ->join("PA.PAT_USUARIO U", "U.IDEN_USUARIO = T.IDEN_USERTEC")
+            ->get("SU.SUT_TRANSAC T")
+            ->result()[0];
+
+
+        if ($tran->FCM) {
+            $push = [
+                "sound" => "assets/sounds/notifications/intuition.mp3",
+                "type" => "message",
+                "tag" => "WIS" . $transac
+            ];
+
+            return \Epys\Wis\Google\Messaging::withData($tran->FCM, $push);
+
+        }
 
     }
 
