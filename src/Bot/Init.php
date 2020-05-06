@@ -12,19 +12,13 @@ class Init
      */
     public function __construct()
     {
-        \Epys\Wis\Console::log("Epys\Wis\Bot\Init::__construct().");
+        \Epys\Wis\Console::log("Epys\Wis\Bot\Init().");
 
         // Verifico que esten cargados los datos
         \Epys\Wis\Client::isLoad(["database", "args"]);
 
-        // Busco Actividad pendiente
-        \Epys\Wis\Client::Activ();
-
-        // Busco Conversaciones pendientes
-        \Epys\Wis\Client::Conversation();
-
         // Seteo tipo de mensaje
-        switch (\Epys\Wis\Client::$args->direction) {
+        switch (\Epys\Wis\Client::$args->message->direction) {
             case "received":
                 self::received();
                 break;
@@ -43,24 +37,30 @@ class Init
     {
         \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received().");
 
+        // Busco Actividad pendiente
+        \Epys\Wis\Client::Activ();
+
+        // Busco Conversaciones pendientes
+        \Epys\Wis\Client::Conversation();
+
         // Valido Troncal
         if (!\Epys\Wis\Client::$trunk->NMRO_TRONCAL) {
             \Epys\Wis\Client::$network
-                ->provider(\Epys\Wis\Client::$args->provider->number)
-                ->contact(\Epys\Wis\Client::$args->contact->number)
-                ->text("La troncal +" . \Epys\Wis\Client::$args->provider->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
+                ->provider(\Epys\Wis\Client::$args->message->provider)
+                ->contact(\Epys\Wis\Client::$args->message->contact)
+                ->text("La troncal +" . \Epys\Wis\Client::$args->message->provider . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
                 ->send();
-            \Epys\Wis\Console::error("La troncal +" . \Epys\Wis\Client::$args->provider->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
+            \Epys\Wis\Console::error("La troncal +" . \Epys\Wis\Client::$args->message->provider . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Valido Contacto
         if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO) {
             \Epys\Wis\Client::$network
-                ->provider(\Epys\Wis\Client::$args->provider->number)
-                ->contact(\Epys\Wis\Client::$args->contact->number)
-                ->text("El contacto +" . \Epys\Wis\Client::$args->contact->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
+                ->provider(\Epys\Wis\Client::$args->message->provider)
+                ->contact(\Epys\Wis\Client::$args->message->contact)
+                ->text("El contacto +" . \Epys\Wis\Client::$args->message->contact . " no existe en nuestra base de datos. Contacte al administrador de Wis.")
                 ->send();
-            \Epys\Wis\Console::error("El contacto " . \Epys\Wis\Client::$args->contact->number . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
+            \Epys\Wis\Console::error("El contacto " . \Epys\Wis\Client::$args->message->contact . " no existe en nuestra base de datos. Contacte al administrador de Wis.", \Epys\Wis\Console::ERROR_INPUT);
         }
 
         // Verifico si hay actividades Pendientes

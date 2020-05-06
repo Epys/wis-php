@@ -9,6 +9,10 @@ class Normalize
 {
 
 
+    protected static $provider;
+    protected static $contact;
+    protected static $args;
+
     /**
      * Método para capturar input de PHP
      * @version 2020-04-14
@@ -31,10 +35,12 @@ class Normalize
         // Guardo datos recepcionados en logs
         \Epys\Wis\Console::input($args);
 
+        self::$args = $args;
+
         // Valido la estructura
         self::Validate($args);
 
-        return $args;
+        return self::$args;
 
     }
 
@@ -45,7 +51,22 @@ class Normalize
     public static function Validate($args)
     {
         \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::Validate().");
-        self::type($args);
+
+        // Verifico si existe network
+        foreach ($args as $network => $objs) {
+            if (in_array($network, ["whatsapp", "messenger", "telegram", "instagram"])) {
+                switch ($network) {
+                    case "whatsapp":
+                        self::whatsapp($objs);
+                        \Epys\Wis\Client::setNetwork("whatsapp", ["provider" => self::$provider, "contact" => self::$contact]);
+                        if (self::$provider)
+                            \Epys\Wis\Client::setProvider(self::$provider);
+                        break;
+                }
+            } else {
+                \Epys\Wis\Console::error("No existe objeto NETWORK.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+            }
+        }
 
     }
 
@@ -54,105 +75,166 @@ class Normalize
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    protected static function type($args)
+    protected static function whatsapp($objs)
     {
-        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::type().");
+        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsapp().");
 
-        if (!$args->id)
-            \Epys\Wis\Console::error("No existe objeto ID.", \Epys\Wis\Console::ERROR_INPUT_ID, __CLASS__, __LINE__);
+        // Varifico que el Objeto sea telefono
+        foreach ($objs as $provider => $payloads) {
+            if (!is_numeric($provider))
+                \Epys\Wis\Console::error("No existe objeto PROVIDER.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
-        if (!in_array($args->network, ["whatsapp", "messenger", "telegram", "instagram"]))
-            \Epys\Wis\Console::error("No existe objeto NETWORK.", \Epys\Wis\Console::ERROR_INPUT_NETWORK, __CLASS__, __LINE__);
+            // Defino Proveedor
+            self::$provider = $provider;
 
-        if (!$args->time)
-            \Epys\Wis\Console::error("No existe objeto TIME.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+            if (is_array($payloads)) {
+                foreach ($payloads as $payload)
+                    self::whatsappPayload($payload);
+            } else {
+                self::whatsappPayload($payloads);
+                // Defino Contacto
+                if ($payloads->contact->number)
+                    self::$contact = $payloads->contact->number;
+            }
 
-        switch ($args->type) {
-            case "message":
-                self::message($args);
-                break;
-            case "dlv":
-                self::dlv($args);
-                break;
-            default:
-                \Epys\Wis\Console::error("El objeto TYPE no es valido.", \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
-                break;
         }
+
     }
 
     /**
-     * Método para validar la estructura del mensaje
+     * Método para validar la estructura
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    protected static function message($args)
+    protected static function whatsappPayload($payload)
     {
-        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::message().");
-
-        if (!$args->contact->number)
-            \Epys\Wis\Console::error("No existe objeto CONTACT.NUMBER.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
-
-        if (!$args->provider->number)
-            \Epys\Wis\Console::error("No existe objeto PROVIDER.NUMBER.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
-
-        if (!in_array($args->direction, ["sent", "received"]))
-            \Epys\Wis\Console::error("El objeto DIRECTION no es valido.", \Epys\Wis\Console::ERROR_INPUT_DIRECTION, __CLASS__, __LINE__);
+        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsappPayload().");
 
 
-        switch ($args->content->type) {
+        if (!$payload->message && !$payload->delivery)
+            \Epys\Wis\Console::error('El esquema iMessageWhatsappPayload no es valido.', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        if ($payload->message && $payload->delivery)
+            \Epys\Wis\Console::error('El esquema iMessageWhatsappPayload no es valido.', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        if ($payload->message && !$payload->contact->number)
+            \Epys\Wis\Console::error('El esquema iMessageWhatsappPayload no es valido.', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        if ($payload->message)
+            self::whatsappPayloadMessage($payload->message);
+
+        if ($payload->delivery)
+            self::whatsappPayloadDelivery($payload->delivery);
+
+        if ($payload->contact){
+            self::whatsappPayloadContact($payload->contact);
+            $payload->message->contact = $payload->contact->number;
+        }
+
+        $payload->message->provider = self::$provider;
+
+        self::$args = $payload;
+
+    }
+
+    /**
+     * Método para validar la estructura
+     * @param $args Argumento recivido en POST
+     * @version 2020-04-14
+     */
+    protected static function whatsappPayloadMessage($message)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsappPayloadMessage().");
+
+        // Verifico hora del mensaje
+        if (!$message->time)
+            \Epys\Wis\Console::error('La hora del mensaje no esta definida [message.time]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        if (!is_numeric($message->time))
+            \Epys\Wis\Console::error('La hora del mensaje debe ser en formato Unix timestamp [message.time]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        // Verifico dirección del mensaje
+        if (!in_array($message->direction, ['sent', 'received']))
+            \Epys\Wis\Console::error('La dirección del mensaje no está definida [message.direction]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        // Si es un envio debe contener cid
+        if ($message->direction === 'sent' && !$message->cid)
+            \Epys\Wis\Console::error('Debe indicar el ID del cliente [message.cid]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        switch ($message->content->type) {
             case "text":
-                if (!isset($args->content->text))
+                if (!isset($message->content->text))
                     \Epys\Wis\Console::error("El objeto CONTENT.TEXT no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
                 break;
             case "image":
-                if (!isset($args->content->url))
+                if (!isset($message->content->url))
                     \Epys\Wis\Console::error("El objeto CONTENT.IMAGE no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_IMAGE, __CLASS__, __LINE__);
                 break;
             case "sticker":
-                if (!isset($args->content->url))
+                if (!isset($message->content->url))
                     \Epys\Wis\Console::error("El objeto CONTENT.STICKER no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_STICKER, __CLASS__, __LINE__);
                 break;
             case "audio":
-                if (!isset($args->content->url))
+                if (!isset($message->content->url))
                     \Epys\Wis\Console::error("El objeto CONTENT.AUDIO no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_AUDIO, __CLASS__, __LINE__);
                 break;
             case "video":
-                if (!isset($args->content->url))
+                if (!isset($message->content->url))
                     \Epys\Wis\Console::error("El objeto CONTENT.VIDEO no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_VIDEO, __CLASS__, __LINE__);
                 break;
             case "document":
-                if (!isset($args->content->url))
+                if (!isset($message->content->url))
                     \Epys\Wis\Console::error("El objeto CONTENT.DOCUMENT no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_DOCUMENT, __CLASS__, __LINE__);
                 break;
             case "location":
-                if (!isset($args->content->longitude) || !isset($args->content->latitude))
+                if (!isset($message->content->longitude) || !isset($message->content->latitude))
                     \Epys\Wis\Console::error("El objeto CONTENT.LOCATION no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_LOCATION, __CLASS__, __LINE__);
                 break;
             default:
                 \Epys\Wis\Console::error("El objeto CONTENT no es valido.", \Epys\Wis\Console::ERROR_INPUT_CONTENT, __CLASS__, __LINE__);
                 break;
         }
-
     }
 
-
     /**
-     * Método para validar la estructura del dlv
+     * Método para validar la estructura
      * @param $args Argumento recivido en POST
      * @version 2020-04-14
      */
-    protected static function dlv($args)
+    protected static function whatsappPayloadDelivery($delivery)
     {
-        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::dlv().");
+        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsappPayloadDelivery().");
 
-        if (!$args->dlvStatus->time)
-            \Epys\Wis\Console::error("No existe objeto DLVSTATUS.TIME.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+        // Verifico hora del mensaje
+        if (!$delivery->did && !$delivery->pid)
+            \Epys\Wis\Console::error('El provider ID no esta definido [delivery.pid, delivery.did]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
-        if (!$args->dlvStatus->dlv)
-            \Epys\Wis\Console::error("No existe objeto DLVSTATUS.DLV.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+        // Verifico hora del mensaje
+        if (!$delivery->time)
+            \Epys\Wis\Console::error('La hora del mensaje no esta definida [delivery.time]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
+        if (!is_numeric($delivery->time))
+            \Epys\Wis\Console::error('La hora del mensaje debe ser en formato Unix timestamp [delivery.time]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+        if ($delivery->status > 10 || !is_numeric($delivery->status))
+            \Epys\Wis\Console::error('El estatus de lectura del mensaje es erroneo [delivery.status]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
     }
+
+    /**
+     * Método para validar la estructura
+     * @param $args Argumento recivido en POST
+     * @version 2020-04-14
+     */
+    protected static function whatsappPayloadContact($contact)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsappPayloadContact().");
+
+        if (!$contact->number)
+            \Epys\Wis\Console::error("No existe objeto CONTACT.NUMBER.", \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+
+    }
+
 
 }
 

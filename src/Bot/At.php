@@ -16,17 +16,18 @@
 \Epys\Wis\Client::isLoad(["database", "args", "contact", "trunk", "conversation"]);
 
 // Valido que sea mensaje
-if (\Epys\Wis\Client::$args->type != "message" || \Epys\Wis\Client::$args->direction != "received")
+if (\Epys\Wis\Client::$args->type != "message" || \Epys\Wis\Client::$args->message->direction != "received")
     \Epys\Wis\Console::error("El tipo de args no es correcto.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
 
 // Valido que la respuesta sea texto
-if (\Epys\Wis\Client::$args->content->type != "text") {
+if (\Epys\Wis\Client::$args->message->content->type != "text") {
     // Envio respuesta
     if (\Epys\Wis\Client::$network->check())
         \Epys\Wis\Client::$network->text("La respuesta debe ser texto.")->send();
 
     //Error
     \Epys\Wis\Console::error("La respuesta debe ser texto.", \Epys\Wis\Console::ERROR_INPUT_CONTENT_TEXT, __CLASS__, __LINE__);
+
 }
 
 // Valido que la respuesta sea texto
@@ -35,7 +36,7 @@ if (!\Epys\Wis\Client::$conversation->RGXP_MATCH)
 
 
 // Asigno respuesta
-$texto = trim(\Epys\Wis\Client::$args->content->text);
+$texto = trim(\Epys\Wis\Client::$args->message->content->text);
 
 // Valido que la respuesta coincida con el regxp
 preg_match(\Epys\Wis\Client::$ask->RGXP_MATCH, $texto, $respuesta);

@@ -2,11 +2,10 @@
 
 namespace Epys\Wis;
 
-
 class Client
 {
 
-    const VERSION = "0.19.49";
+    const VERSION = "0.33.51";
 
     const BASE_API = "https://api.wis.cl";
 
@@ -31,6 +30,11 @@ class Client
      * Contact
      */
     public static $contact;
+
+    /**
+     * Provider
+     */
+    public static $provider;
 
     /**
      * Trunk
@@ -166,10 +170,6 @@ class Client
 
         self::$args = Config\Normalize::Input();
 
-        self::setNetwork(self::$args->network, [
-            self::$args->provider->number,
-            self::$args->contact->number
-        ]);
     }
 
     /**
@@ -183,11 +183,21 @@ class Client
         switch ($net) {
             case "whatsapp":
                 self::$network = new \Epys\Wis\Network\Whatsapp(
-                    self::$args->provider->number,
-                    self::$args->contact->number
+                    $config["provider"],
+                    $config["contact"]
                 );
                 break;
         }
+    }
+
+    /**
+     * Funcion para definir provider
+     * @version 2020-05-05
+     */
+    public static function setProvider($provider)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Client::setProvider(" . $provider . ").");
+        self::$provider = $provider;
     }
 
     /**
@@ -196,11 +206,16 @@ class Client
      */
     public static function isType()
     {
-        if (!self::$args->type)
-            \Epys\Wis\Console::error("El objeto TYPE no es valido. Ejecute la función ´self::$args´ para capturar datos.", \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
 
-        // Retorno datos
-        return self::$args->type;
+        if (self::$args->message)
+            return "message";
+
+        if (self::$args->delivery)
+            return "delivery";
+
+        \Epys\Wis\Console::error("El objeto Payload no es valido. Ejecute la función ´isType()´ para capturar datos.", \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
+
+
     }
 
     /**

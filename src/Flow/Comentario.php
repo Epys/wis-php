@@ -27,7 +27,7 @@ class Comentario
         if (\Epys\Wis\Client::$args->type == "message") {
 
             \Epys\Wis\Console::log("Verifico typo de documento.");
-            switch (\Epys\Wis\Client::$args->content->type) {
+            switch (\Epys\Wis\Client::$args->message->content->type) {
                 case "text":
                     self::text();
                     break;
@@ -55,15 +55,15 @@ class Comentario
                 "IDEN_USUARIO" => \Epys\Wis\Client::$contact->IDEN_CONTACTO,
                 "IDEN_TRANSAC" => \Epys\Wis\Client::$args->transac,
                 "FECH_COMENTARIO" => \Epys\Wis\Client::$args->time,
-                "DESC_COMENTARIO" => substr(json_encode(\Epys\Wis\Client::$args->content->text), 1, -1),
-                "CODI_DIRECCION" => \Epys\Wis\Client::$args->direction,
-                "NMRO_LATITUDE" => \Epys\Wis\Client::$args->content->latitude,
-                "NMRO_LONGITUDE" => \Epys\Wis\Client::$args->content->longitude,
-                "FLAG_URL" => \Epys\Wis\Client::$args->content->url,
-                "FLAG_MIME" => \Epys\Wis\Client::$args->content->mime,
-                "FLAG_TYPE" => \Epys\Wis\Client::$args->content->type,
+                "DESC_COMENTARIO" => substr(json_encode(\Epys\Wis\Client::$args->message->content->text), 1, -1),
+                "CODI_DIRECCION" => \Epys\Wis\Client::$args->message->direction,
+                "NMRO_LATITUDE" => \Epys\Wis\Client::$args->message->content->latitude,
+                "NMRO_LONGITUDE" => \Epys\Wis\Client::$args->message->content->longitude,
+                "FLAG_URL" => \Epys\Wis\Client::$args->message->content->url,
+                "FLAG_MIME" => \Epys\Wis\Client::$args->message->content->mime,
+                "FLAG_TYPE" => \Epys\Wis\Client::$args->message->content->type,
                 "FLAG_ACKID" => \Epys\Wis\Client::$args->id,
-                "THUMB" => \Epys\Wis\Client::$args->content->thumb
+                "THUMB" => \Epys\Wis\Client::$args->message->content->thumb
             ];
 
             // Guardo comentario

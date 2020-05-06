@@ -12,17 +12,17 @@ class Whatsapp implements NetworkInterface
     /**
      * Provider
      */
-    const URL = \Epys\Wis\Client::BASE_API . "/whatsapp/send";
+    const URL = \Epys\Wis\Client::BASE_API . "/send";
 
     /**
      * Provider
      */
-    private static $_provider = false;
+    private static $provider = false;
 
     /**
      * Contact
      */
-    private static $_contact = false;
+    private static $contact = false;
 
     /**
      * Transac
@@ -59,9 +59,9 @@ class Whatsapp implements NetworkInterface
     public
     function check(): bool
     {
-        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::check(" . ((self::$_provider && self::$_contact) ? true : false) . ").");
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::check(" . ((self::$provider && self::$contact) ? true : false) . ").");
 
-        return (self::$_provider && self::$_contact) ? true : false;
+        return (self::$provider && self::$contact) ? true : false;
     }
 
     /**
@@ -82,22 +82,26 @@ class Whatsapp implements NetworkInterface
         if ($transac)
             self::transac($transac);
 
-        if (!self::$_contact)
+        if (!self::$contact)
             \Epys\Wis\Console::error("No esta definido el número de contacto.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
 
-        if (!self::$_provider)
+        if (!self::$provider)
             \Epys\Wis\Console::error("No esta definido el número de proveedor.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
 
+
         $json = [
-            "id" => self::clientid(),
-            "time" => time(),
-            "network" => "whatsapp",
-            "type" => "message",
-            "direction" => "sent",
-            "transac" => self::$_transac,
-            "contact" => ["number" => self::$_contact],
-            "content" => self::$_content,
-            "provider" => ["number" => self::$_provider]
+            "whatsapp" => [
+                self::$provider => [
+                    "contact" => ["number" => self::$contact],
+                    "message" => [
+                        "cid" => self::clientid(),
+                        "direction" => "sent",
+                        "transac" => self::$_transac,
+                        "time" => round(microtime(true) * 1000),
+                        "content" => self::$_content
+                    ]
+                ]
+            ]
         ];
 
         // Retorno resultado
@@ -143,7 +147,7 @@ class Whatsapp implements NetworkInterface
             return;
 
         // Defino proveedor
-        self::$_provider = $provider;
+        self::$provider = $provider;
 
         // Retorno Clase
         return $this;
@@ -163,7 +167,7 @@ class Whatsapp implements NetworkInterface
             return;
 
         // Defino contacto
-        self::$_contact = $contact;
+        self::$contact = $contact;
 
         // Retorno Clase
         return $this;

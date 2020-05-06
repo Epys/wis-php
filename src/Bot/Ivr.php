@@ -42,7 +42,7 @@ class Ivr
 
         // Verifico que no exista actividad temporal
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
-            \Epys\Wis\Console::error("El contacto +" . \Epys\Wis\Client::$args->contact->number . " ya posee una actividad pendiente.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("El contacto +" . \Epys\Wis\Client::$args->message->contact . " ya posee una actividad pendiente.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que la troncal tenga un IVR
@@ -75,7 +75,7 @@ class Ivr
 
         // Verifico que la troncal tenga un IVR
         if (!\Epys\Wis\Client::$conversation->IDEN_IVR) {
-            \Epys\Wis\Console::error("La troncal " . \Epys\Wis\Client::$args->provider->number . " no tiene un IVR asociado.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+            \Epys\Wis\Console::error("La troncal " . \Epys\Wis\Client::$args->message->provider . " no tiene un IVR asociado.", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
         // Verifico que el IVR tenga REGXP
@@ -84,14 +84,14 @@ class Ivr
         }
 
         // Verifico que el IVR tenga REGXP
-        if (\Epys\Wis\Client::$args->content->type !== "text") {
-            \Epys\Wis\Console::error("La respuesta debe ser texto [" . \Epys\Wis\Client::$args->content->type . "].", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
+        if (\Epys\Wis\Client::$args->message->content->type !== "text") {
+            \Epys\Wis\Console::error("La respuesta debe ser texto [" . \Epys\Wis\Client::$args->message->content->type . "].", \Epys\Wis\Console::ERROR_INPUT, __CLASS__, __LINE__);
         }
 
 
         //Valido que cumpla con regxp
-        \Epys\Wis\Console::log(\Epys\Wis\Client::$conversation->RGXP_MATCH . " <-> " . \Epys\Wis\Client::$args->content->text);
-        preg_match(\Epys\Wis\Client::$conversation->RGXP_MATCH, \Epys\Wis\Client::$args->content->text, $respuesta);
+        \Epys\Wis\Console::log(\Epys\Wis\Client::$conversation->RGXP_MATCH . " <-> " . \Epys\Wis\Client::$args->message->content->text);
+        preg_match(\Epys\Wis\Client::$conversation->RGXP_MATCH, \Epys\Wis\Client::$args->message->content->text, $respuesta);
         if (isset($respuesta[0])) {
 
             //Si la respuesta es 0

@@ -21,7 +21,7 @@ class Contact
 
         // Busco contacto
         $contacto = \Epys\Wis\Client::$database->select("*, PA.DESC_EMPRESA(CODI_EMPRESA) DESC_EMPRESA, PA.DESC_ZONA(CODI_ZONA) DESC_ZONA", false)
-            ->where(["NMRO_CONTACTO" => \Epys\Wis\Client::$args->contact->number])
+            ->where(["NMRO_CONTACTO" => \Epys\Wis\Client::$args->message->contact])
             ->get("WI.WIT_CONTACTO")->result()[0];
 
         //Envio Logs
@@ -50,8 +50,8 @@ class Contact
         \Epys\Wis\Client::isLoad(["database", "args"]);
 
         \Epys\Wis\Client::$database->insert("WI.WIT_CONTACT", [
-            NMRO_CONTACTO => \Epys\Wis\Client::$args->contact->number,
-            DESC_CONTACTO => \Epys\Wis\Client::$args->contact->name,
+            NMRO_CONTACTO => \Epys\Wis\Client::$args->message->contact,
+            DESC_CONTACTO => \Epys\Wis\Client::$args->message->contact->name,
             ACTIVO => 0
         ]);
 

@@ -23,10 +23,10 @@ class Trunk
 
         // Si existe el contacto, busco su zona
         if (\Epys\Wis\Client::$contact->CODI_ZONA)
-            $trunk = \Epys\Wis\Client::$database->where(["NMRO_TRONCAL" => \Epys\Wis\Client::$args->provider->number, "CODI_ZONA" => \Epys\Wis\Client::$contact->CODI_ZONA])->get("WI.WIT_TRONCAL")->result()[0];
+            $trunk = \Epys\Wis\Client::$database->where(["NMRO_TRONCAL" => \Epys\Wis\Client::$provider, "CODI_ZONA" => \Epys\Wis\Client::$contact->CODI_ZONA])->get("WI.WIT_TRONCAL")->result()[0];
 
         if (!$trunk)
-            $trunk = \Epys\Wis\Client::$database->where(["NMRO_TRONCAL" => \Epys\Wis\Client::$args->provider->number, "CODI_ZONA" => "XXXX"])->get("WI.WIT_TRONCAL")->result()[0];
+            $trunk = \Epys\Wis\Client::$database->where(["NMRO_TRONCAL" => \Epys\Wis\Client::$provider, "CODI_ZONA" => "XXXX"])->get("WI.WIT_TRONCAL")->result()[0];
 
 
         //Envio Logs
@@ -59,8 +59,8 @@ class Trunk
         \Epys\Wis\Client::isLoad(["database", "args"]);
 
         \Epys\Wis\Client::$database->insert("WI.WIT_TRONCAL", [
-            NMRO_TRONCAL => \Epys\Wis\Client::$args->provider->number,
-            DESC_TRONCAL => \Epys\Wis\Client::$args->provider->number,
+            NMRO_TRONCAL => \Epys\Wis\Client::$args->message->provider,
+            DESC_TRONCAL => \Epys\Wis\Client::$args->message->provider,
             CODI_ZONA => "XXXX",
             ACTIVO => 0
         ]);
