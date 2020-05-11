@@ -116,9 +116,9 @@ class Ivr
                     // Valido que el IVR tenga una acción o pregunta
                     if ($ivr->CODI_ACCION) {
 
-                        $Action = new \Epys\Wis\Bot\Action();
-                        eval('$Action->run = function () { ' . $Action::blob($ivr->CODI_ACCION) . '};');
-                        $Action->run();
+                        $Blob = new \Epys\Wis\Util\Blob();
+                        eval('$Blob->run = function () { ' . \Epys\Wis\Bot\Action::blob($ivr->CODI_ACCION) . '};');
+                        $Blob->run();
                     }
 
                     // Pausa por 3 segundos

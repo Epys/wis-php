@@ -7,6 +7,7 @@ namespace Epys\Wis\Config;
 class Trunk
 {
 
+
     /**
      * Método para capturar troncal desde la DB
      * @version 2020-04-14
@@ -66,6 +67,8 @@ class Trunk
         ]);
 
     }
+
+
 
 
 }

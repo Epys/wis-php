@@ -3,6 +3,7 @@
 
 namespace Epys\Wis\Flow;
 
+use finfo;
 
 class Comentario
 {
@@ -51,11 +52,14 @@ class Comentario
                     break;
             }
 
+            if (\Epys\Wis\Client::$args->message->content->text)
+                $text = substr(json_encode(\Epys\Wis\Client::$args->message->content->text), 1, -1);
+
             $comentario = [
                 "IDEN_USUARIO" => \Epys\Wis\Client::$contact->IDEN_CONTACTO,
                 "IDEN_TRANSAC" => \Epys\Wis\Client::$args->transac,
                 "FECH_COMENTARIO" => \Epys\Wis\Client::$args->message->time,
-                "DESC_COMENTARIO" => substr(json_encode(\Epys\Wis\Client::$args->message->content->text), 1, -1),
+                "DESC_COMENTARIO" => nvl($text, nvl(\Epys\Wis\Client::$args->message->name, nvl(\Epys\Wis\Client::$args->message->caption, md5(time())))),
                 "CODI_DIRECCION" => \Epys\Wis\Client::$args->message->direction,
                 "NMRO_LATITUDE" => \Epys\Wis\Client::$args->message->content->latitude,
                 "NMRO_LONGITUDE" => \Epys\Wis\Client::$args->message->content->longitude,
@@ -147,6 +151,67 @@ class Comentario
     static function image()
     {
         \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::image().");
+
+        // Path de archivos
+        $water = FCPATH . 'assets/favicon/iso-wis.png';
+        $folder = 'whatsapp/' . \Epys\Wis\Client::$args->transac . '/';
+        $path = FCPATH . $folder;
+
+        @chmod($path, 0777);
+
+        // Nombre de la imagen
+        $nombre = phRut(\Epys\Wis\Client::$contact->IDEN_CONTACTO) . '_' . time();
+        $thumb = 'thumb_' . $nombre;
+        $url = $folder . $nombre . '.jpg';
+        $tmp = sys_get_temp_dir() . "/" . $nombre . '.jpg';
+
+        \Epys\Wis\Client::$args->message->name = $nombre . '.jpg';
+        \Epys\Wis\Client::$args->message->content->mime = "image/jpeg";
+
+        //Guardo tamaño original
+        $content = file_get_contents(\Epys\Wis\Client::$args->message->content->url);
+        _file_put_contents($tmp, $content);
+
+        // Guardar thumb
+        $img = new \Epys\Wis\Util\Upload($tmp);
+
+        if ($img->uploaded) {
+
+            // Guardo en tamaño original
+            $img->file_new_name_body = $nombre;
+            $img->image_watermark = $water;
+            $img->image_watermark_position = 'TL';
+            $img->image_convert = 'jpg';
+            $img->jpeg_quality = 80;
+            $img->file_overwrite = true;
+            $img->Process($path);
+
+            // Creo previzualización de la imagen en 330x330
+            $img->file_new_name_body = $thumb;
+            $img->image_watermark = $water;
+            $img->image_watermark_position = 'TL';
+            $img->file_overwrite = true;
+            $img->image_convert = 'jpg';
+            $img->jpeg_quality = 10;
+            $img->image_resize = true;
+            $img->image_ratio_crop = true;
+            $img->image_y = 250;
+            $img->image_x = 250;
+            $img->Process($path);
+
+            if ($img->processed) {
+                $img->Clean();
+
+                $im64 = base64_encode(file_get_contents($path . $thumb . '.jpg'));
+                \Epys\Wis\Client::$args->message->content->thumb = $im64;
+
+            } else {
+                \Epys\Wis\Client::$args->message->content->thumb = base64_encode($content);
+            }
+        } else {
+            \Epys\Wis\Client::$args->message->content->thumb = base64_encode($content);
+        }
+
     }
 
     protected
@@ -159,18 +224,73 @@ class Comentario
     static function audio()
     {
         \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::audio().");
+        // Capturo contenido
+        $content = file_get_contents(\Epys\Wis\Client::$args->message->content->url);
+        $finfo = new \finfo(FILEINFO_MIME);
+        $mime = $finfo->buffer($content);
+        if (strpos($mime, ";"))
+            $mime = explode(';', $mime)[0];
+        $ext = explode('/', $mime)[1];
+
+        // Path de archivos
+        $folder = 'whatsapp/' . \Epys\Wis\Client::$args->transac . '/';
+        $name = md5(time()).".ogg";
+        $path = $folder . $name;
+
+        _file_put_contents(FCPATH . $path, $content);
+
+        \Epys\Wis\Client::$args->message->content->url = $path;
+        \Epys\Wis\Client::$args->message->content->mime = $mime;
+        \Epys\Wis\Client::$args->message->content->name = $name;
+
     }
 
     protected
     static function video()
     {
         \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::video().");
+        // Capturo contenido
+        $content = file_get_contents(\Epys\Wis\Client::$args->message->content->url);
+        $finfo = new \finfo(FILEINFO_MIME);
+        $mime = $finfo->buffer($content);
+        if (strpos($mime, ";"))
+            $mime = explode(';', $mime)[0];
+        $ext = explode('/', $mime)[1];
+
+        // Path de archivos
+        $folder = 'whatsapp/' . \Epys\Wis\Client::$args->transac . '/';
+        $name = md5(time()) . "." . $ext;
+        $path = $folder . $name;
+
+        _file_put_contents(FCPATH . $path, $content);
+
+        \Epys\Wis\Client::$args->message->content->url = $path;
+        \Epys\Wis\Client::$args->message->content->mime = $mime;
+        \Epys\Wis\Client::$args->message->content->name = $name;
     }
 
     protected
     static function document()
     {
         \Epys\Wis\Console::log("Epys\Wis\Flow\Comentario::document().");
+        // Capturo contenido
+        $content = file_get_contents(\Epys\Wis\Client::$args->message->content->url);
+        $finfo = new \finfo(FILEINFO_MIME);
+        $mime = $finfo->buffer($content);
+        if (strpos($mime, ";"))
+            $mime = explode(';', $mime)[0];
+        $ext = explode('/', $mime)[1];
+
+        // Path de archivos
+        $folder = 'whatsapp/' . \Epys\Wis\Client::$args->transac . '/';
+        $name = md5(time()) . "." . $ext;
+        $path = $folder . $name;
+
+        _file_put_contents(FCPATH . $path, $content);
+
+        \Epys\Wis\Client::$args->message->content->url = $path;
+        \Epys\Wis\Client::$args->message->content->mime = $mime;
+        \Epys\Wis\Client::$args->message->content->name = $name;
     }
 
     protected

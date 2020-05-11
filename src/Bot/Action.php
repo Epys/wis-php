@@ -7,26 +7,6 @@ namespace Epys\Wis\Bot;
 class Action
 {
 
-    /**
-     * Create __construct
-     */
-    public function __construct()
-    {
-        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::__construct().");
-    }
-
-    /**
-     * Create __call
-     */
-    public function __call($method, $args)
-    {
-        \Epys\Wis\Console::log("Epys\Wis\Bot\Action::__call(" . $method . ", " . $args . ").");
-
-        if (isset($this->$method)) {
-            $func = $this->$method;
-            return call_user_func_array($func, $args);
-        }
-    }
 
     public
     static function codi($codi)

@@ -7,7 +7,6 @@ namespace Epys\Wis\Bot;
 class Ask
 {
 
-
     /**
      * Método para responder preguntas
      * @version 2020-04-20
@@ -22,9 +21,9 @@ class Ask
         // Valido que el IVR tenga una acción o pregunta
         if (\Epys\Wis\Client::$conversation->CODI_ACCION) {
 
-            $Action = new \Epys\Wis\Bot\Action();
-            eval('$Action->run = function () { ' . \Epys\Wis\Client::$conversation->BLOB_ACCION . '};');
-            $Action->run();
+            $Blob = new \Epys\Wis\Util\Blob();
+            eval('$Blob->run = function () { ' . \Epys\Wis\Client::$conversation->BLOB_ACCION . '};');
+            $Blob->run();
 
         }
 
@@ -49,24 +48,27 @@ class Ask
             $iden = \Epys\Wis\Client::$activ->IDEN_ACTIV;
         }
 
-        $pregunta = self::getPregIden($iden);
+        if($iden){
+            $pregunta = self::getPregIden($iden);
 
-        if ($pregunta)
-            if (\Epys\Wis\Client::$network->check()) { // Verifico que este agregado provider y contact
+            if ($pregunta)
+                if (\Epys\Wis\Client::$network->check()) { // Verifico que este agregado provider y contact
 
-                // Guardo Pregunta
-                \Epys\Wis\Config\Conversation::setContactTrunk(["CODI_PREGUNTA" => $pregunta->CODI_PREGUNTA, "IDEN_ACTIV" => $iden]);
+                    // Guardo Pregunta
+                    \Epys\Wis\Config\Conversation::setContactTrunk(["CODI_PREGUNTA" => $pregunta->CODI_PREGUNTA, "IDEN_ACTIV" => $iden]);
 
-                // Envio mensaje
-                \Epys\Wis\Client::$network
-                    ->transac($iden)
-                    ->text($pregunta->DESC_PREGUNTA)
-                    ->send();
+                    // Envio mensaje
+                    \Epys\Wis\Client::$network
+                        ->transac($iden)
+                        ->text($pregunta->DESC_PREGUNTA)
+                        ->send();
 
-                // Guardo mensaje
-                \Epys\Wis\Flow\Comentario::setBot($iden, $pregunta->DESC_PREGUNTA);
+                    // Guardo mensaje
+                    \Epys\Wis\Flow\Comentario::setBot($iden, $pregunta->DESC_PREGUNTA);
 
-            }
+                }
+        }
+
 
     }
 
@@ -91,9 +93,6 @@ class Ask
             ->join("SU.SUT_TRANSAC A", "A.IDEN_TIPOACTIV = T.IDEN_TIPOACTIV")
             ->order_by("P.NMRO_PREGUNTA")
             ->get("WI.WIT_PREGUNTA P")->result()[0];
-
-        //Envio Logs
-        \Epys\Wis\Console::log($preg);
 
         return $preg;
 

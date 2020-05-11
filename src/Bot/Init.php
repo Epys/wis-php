@@ -37,6 +37,9 @@ class Init
     {
         \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received().");
 
+        // Busco Arrobas
+        \Epys\Wis\Bot\At::Response();
+
         // Busco Actividad pendiente
         \Epys\Wis\Client::Activ();
 

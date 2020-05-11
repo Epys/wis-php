@@ -5,7 +5,7 @@ namespace Epys\Wis;
 class Client
 {
 
-    const VERSION = "0.33.51";
+    const VERSION = "0.44.55";
 
     const BASE_API = "https://api.wis.cl";
 
@@ -254,7 +254,19 @@ class Client
     public static function Trunk()
     {
         \Epys\Wis\Console::log("Epys\Wis\Client::Trunk().");
-        return self::$trunk = \Epys\Wis\Config\Trunk::Get();
+        self::$trunk = \Epys\Wis\Config\Trunk::Get();
+
+        // Valido que la troncal tenga una acción especial
+        /**********************************************************************************
+         * ADVERTENCIA - ESTE COMANDO PUEDE PRODUCIÓN UN BLUCE DE MENSAJES
+         **********************************************************************************/
+        if (self::$trunk->BLOB_TRONCAL && self::isType() === "message") {
+            $Blob = new \Epys\Wis\Util\Blob();
+            eval('$Blob->run = function () { ' . self::$trunk->BLOB_TRONCAL . '};');
+            $Blob->run();
+        }
+
+
     }
 
 
