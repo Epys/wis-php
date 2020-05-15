@@ -221,7 +221,6 @@ class Client
 
         \Epys\Wis\Console::error("El objeto Payload no es valido. Ejecute la función ´isType()´ para capturar datos.", \Epys\Wis\Console::ERROR_INPUT_TYPE, __CLASS__, __LINE__);
 
-
     }
 
     /**

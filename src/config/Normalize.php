@@ -9,6 +9,7 @@ class Normalize
 {
 
 
+    protected static $type;
     protected static $provider;
     protected static $contact;
     protected static $args;
@@ -58,9 +59,11 @@ class Normalize
                 switch ($network) {
                     case "whatsapp":
                         self::whatsapp($objs);
-                        \Epys\Wis\Client::setNetwork("whatsapp", ["provider" => self::$provider, "contact" => self::$contact]);
-                        if (self::$provider)
-                            \Epys\Wis\Client::setProvider(self::$provider);
+                        if (self::$type == "message") {
+                            \Epys\Wis\Client::setNetwork("whatsapp", ["provider" => self::$provider, "contact" => self::$contact]);
+                            if (self::$provider)
+                                \Epys\Wis\Client::setProvider(self::$provider);
+                        }
                         break;
                 }
             } else {
@@ -120,18 +123,23 @@ class Normalize
         if ($payload->message && !$payload->contact->number)
             \Epys\Wis\Console::error('El esquema iMessageWhatsappPayload no es valido.', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
-        if ($payload->message)
+        if ($payload->message) {
+            self::$type = "message";
             self::whatsappPayloadMessage($payload->message);
 
-        if ($payload->delivery)
-            self::whatsappPayloadDelivery($payload->delivery);
+            $payload->message->provider = self::$provider;
 
-        if ($payload->contact){
-            self::whatsappPayloadContact($payload->contact);
-            $payload->message->contact = $payload->contact->number;
+            if ($payload->contact) {
+                self::whatsappPayloadContact($payload->contact);
+                $payload->message->contact = $payload->contact->number;
+            }
+
         }
 
-        $payload->message->provider = self::$provider;
+        if ($payload->delivery) {
+            self::$type = "delivery";
+            self::whatsappPayloadDelivery($payload->delivery);
+        }
 
         self::$args = $payload;
 
@@ -206,8 +214,8 @@ class Normalize
         \Epys\Wis\Console::log("Epys\Wis\Config\Normalize::whatsappPayloadDelivery().");
 
         // Verifico hora del mensaje
-        if (!$delivery->did && !$delivery->pid)
-            \Epys\Wis\Console::error('El provider ID no esta definido [delivery.pid, delivery.did]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
+        if (!$delivery->id)
+            \Epys\Wis\Console::error('El provider ID no esta definido [delivery.id]', \Epys\Wis\Console::ERROR_REQUIRED, __CLASS__, __LINE__);
 
         // Verifico hora del mensaje
         if (!$delivery->time)

@@ -210,7 +210,7 @@ class Console
             "line" => $line,
             "code" => $codigo,
             "error" => $msg,
-            // "logs" => self::$_console["log"],
+            "logs" => self::$_console["log"],
             "input" => self::$_console["input"]
         ], function ($value) {
             return !is_null($value) && $value !== "";

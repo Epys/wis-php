@@ -48,7 +48,7 @@ class Ask
             $iden = \Epys\Wis\Client::$activ->IDEN_ACTIV;
         }
 
-        if($iden){
+        if ($iden) {
             $pregunta = self::getPregIden($iden);
 
             if ($pregunta)
@@ -87,7 +87,7 @@ class Ask
         // Busco Preguntas que se ejecuten en pendiente
         $preg = \Epys\Wis\Client::$database
             ->select("P.*")
-            ->where(["A.IDEN_TRANSAC"=> $iden, "P.CODI_ESTADO" => 'PEND'])
+            ->where(["A.IDEN_TRANSAC" => $iden, "P.CODI_ESTADO" => 'PEND'])
             ->where("P.CODI_PREGUNTA NOT IN (SELECT CODI_PREGUNTA FROM WI.WIT_RESPUESTA WHERE IDEN_ACTIV = A.IDEN_TRANSAC) AND P.ACTIVO = 1")
             ->join("WI.WIT_PREGXTIPO T", "T.CODI_PREGUNTA = P.CODI_PREGUNTA")
             ->join("SU.SUT_TRANSAC A", "A.IDEN_TIPOACTIV = T.IDEN_TIPOACTIV")
@@ -125,3 +125,7 @@ class Ask
             ->get("WI.WIT_PREGUNTA")->result()[0];
     }
 }
+
+
+
+
