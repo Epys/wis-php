@@ -20,7 +20,7 @@ class Messaging
 
     /**
      * Método para enviar data
-     * @version 2020-05-06
+     * @version        20.05.185.391
      */
     public static function withData($device, $data = ["body", "title", "icon", "sound", "type", "tag", "activ"])
     {
@@ -73,7 +73,7 @@ class Messaging
 
     /**
      * Método para enviar notificacion
-     * @version 2020-05-06
+     * @version        20.05.185.391
      */
     public static function withNotification($device, $notification = ["body", "title", "icon", "sound", "type", "tag", "activ"])
     {
@@ -115,7 +115,7 @@ class Messaging
 
     /**
      * Método para asignar token
-     * @version 2020-05-06
+     * @version        20.05.185.391
      */
     public
     static function setToken($tkn)
@@ -127,7 +127,7 @@ class Messaging
 
     /**
      * Método para asignar token
-     * @version 2020-05-06
+     * @version        20.05.185.391
      */
     protected
     static function validateNotification($notification)

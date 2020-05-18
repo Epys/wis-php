@@ -49,7 +49,7 @@ class Console
      * Método que define path de logs
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @version 2020-04-14
+     * @version        20.05.185.391
      */
     public static function setPath($path = null)
     {
@@ -76,7 +76,7 @@ class Console
      * Método que escribe un mensaje en los logs
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     protected static function clean($msg)
     {
@@ -94,7 +94,7 @@ class Console
      * Método que escribe un mensaje en los logs
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function log($msg = null, $codigo = false)
     {
@@ -118,7 +118,7 @@ class Console
      * Método que escribe un mensaje en los logs para crons
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function cron($msg = null, $codigo = false)
     {
@@ -141,7 +141,7 @@ class Console
      * Método que escribe un mensaje en los logs pero de formato input (json)
      * @param $codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $json Lo que recepciona PHP en input
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function input($json = null, $codigo = false)
     {
@@ -162,7 +162,7 @@ class Console
      * Método que escribe un mensaje en los logs pero de formato output (json)
      * @param $codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $json Lo que recepciona PHP en input
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function output($json = null, $codigo = false)
     {
@@ -182,7 +182,7 @@ class Console
      * Método que escribe un mensaje en los logs pero de formato error
      * @param codigo Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param msg Mensaje que se desea escribir
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function error($msg = null, $codigo = null, $class = __CLASS__, $line = __LINE__)
     {
@@ -210,7 +210,7 @@ class Console
             "line" => $line,
             "code" => $codigo,
             "error" => $msg,
-            "logs" => self::$_console["log"],
+            // "logs" => self::$_console["log"],
             "input" => self::$_console["input"]
         ], function ($value) {
             return !is_null($value) && $value !== "";
@@ -223,7 +223,7 @@ class Console
      * @param $filepath Código del mensaje que se desea escribir (Clase con códigos de logs o errores)
      * @param $str Mensaje que se desea escribir
      * @param $name Nombre del archivo
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     private static function _putContents($filepath, $str, $name = false)
     {
@@ -245,7 +245,7 @@ class Console
 
     /**
      * Método que imprime la consola
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function print()
     {
@@ -254,7 +254,7 @@ class Console
 
     /**
      * Método que imprime la consola
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function dump()
     {
@@ -263,7 +263,7 @@ class Console
 
     /**
      * Método que imprime la consola
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function debug()
     {

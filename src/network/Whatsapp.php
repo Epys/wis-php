@@ -12,7 +12,8 @@ class Whatsapp implements NetworkInterface
     /**
      * Provider
      */
-    const URL = \Epys\Wis\Client::BASE_API . "/send";
+    const SEND = \Epys\Wis\Client::BASE_API . "/send";
+    const CONTACT = \Epys\Wis\Client::BASE_API . "/contact";
 
     /**
      * Provider
@@ -54,7 +55,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para chequear si esta proveedor y contacto
-     * @version 2020-04-22
+     * @version        20.05.185.391
      */
     public
     function check(): bool
@@ -66,7 +67,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function send($provider = null, $contact = null, $transac = null, $content = null)
@@ -105,7 +106,7 @@ class Whatsapp implements NetworkInterface
         ];
 
         // Retorno resultado
-        $result = \Epys\Wis\Http\Service::POST(self::URL, $json);
+        $result = \Epys\Wis\Http\Service::POST(self::SEND, $json);
 
         return $result;
 
@@ -113,7 +114,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar options
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function options($options = ["provider", "contact", "transac"])
@@ -135,7 +136,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function provider($provider)
@@ -155,7 +156,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function contact($contact)
@@ -175,7 +176,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function transac($transac)
@@ -191,7 +192,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar text
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function text($text)
@@ -206,7 +207,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar imagen
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function image($file, $caption)
@@ -221,7 +222,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar stiker
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function stiker($file, $caption)
@@ -236,7 +237,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar documento
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function document($file, $caption)
@@ -251,7 +252,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar audio
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function audio($file, $caption)
@@ -266,7 +267,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar video
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function video($file, $caption)
@@ -281,7 +282,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar localizador
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function location($latitude, $longitude, $caption)
@@ -296,7 +297,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para generar ID unico
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     protected
     static function clientid()
@@ -305,6 +306,111 @@ class Whatsapp implements NetworkInterface
         \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::clientid(" . $id . ").");
 
         return $id;
+    }
+
+
+    /**
+     * Método para buscar contacto
+     * @version        20.05.185.391
+     */
+    public
+    function getContact($row)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::getContact().");
+
+        if (!self::$provider)
+            \Epys\Wis\Console::error("No esta definido el número de proveedor.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        if (!$row->NMRO_CONTACTO)
+            \Epys\Wis\Console::error("No esta definido el número de contacto.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        $json = [
+            "whatsapp" => [
+                self::$provider => [
+                    "contact" => ["number" => $row->NMRO_CONTACTO],
+                    "action" => [
+                        "contact" => "get"
+                    ]
+                ]
+            ]
+        ];
+
+        // Retorno resultado
+        $result = \Epys\Wis\Http\Service::POST(self::CONTACT, $json);
+
+        return $result;
+
+    }
+
+    /**
+     * Método para actualizar contacto
+     * @version        20.05.185.391
+     */
+    public
+    function setContact($row)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::setContact().");
+
+        if (!self::$provider)
+            \Epys\Wis\Console::error("No esta definido el número de proveedor.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        if (!$row->NMRO_CONTACTO)
+            \Epys\Wis\Console::error("No esta definido el número de contacto.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        $json = [
+            "whatsapp" => [
+                self::$provider => [
+                    "contact" => [
+                        "number" => $row->NMRO_CONTACTO,
+                        "name" => $row->DESC_CONTACTO,
+                        "uid" => $row->IDEN_CONTACTO,
+                        "subject" => $row->CODI_EMPRESA,
+                        "webhook" => $row->FLAG_WEBHOOK
+                    ],
+                    "action" => [
+                        "contact" => "set"
+                    ]
+                ]
+            ]
+        ];
+
+        // Retorno resultado
+        $result = \Epys\Wis\Http\Service::POST(self::CONTACT, $json);
+
+        return $result;
+
+    }
+
+    /**
+     * Método para eliminar contacto
+     * @version        20.05.185.391
+     */
+    public
+    function delContact($row)
+    {
+        \Epys\Wis\Console::log("Epys\Wis\Network\Whatsapp::delContact().");
+
+        if (!self::$provider)
+            \Epys\Wis\Console::error("No esta definido el número de proveedor.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        if (!$row->NMRO_CONTACTO)
+            \Epys\Wis\Console::error("No esta definido el número de contacto.", \Epys\Wis\Console::ERROR_INPUT_TIME, __CLASS__, __LINE__);
+
+        $json = [
+            "whatsapp" => [
+                self::$provider => [
+                    "contact" => ["number" => $row->NMRO_CONTACTO],
+                    "action" => [
+                        "contact" => "del"
+                    ]
+                ]
+            ]
+        ];
+
+        // Retorno resultado
+        $result = \Epys\Wis\Http\Service::POST(self::CONTACT, $json);
+
+        return $result;
     }
 
 }

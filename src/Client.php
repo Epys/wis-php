@@ -5,7 +5,7 @@ namespace Epys\Wis;
 class Client
 {
 
-    const VERSION = "0.44.55";
+    const VERSION = "0.53.59";
 
     const BASE_API = "https://api.wis.cl";
 
@@ -115,7 +115,7 @@ class Client
     /**
      * Método para asignar token
      * @param $token Claves de acceso
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function setToken($token)
     {
@@ -126,7 +126,7 @@ class Client
 
     /**
      * Método para asignar base de datos
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function setDatabase($db)
     {
@@ -136,7 +136,7 @@ class Client
 
     /**
      * Método para asignar IVR
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function setIvr($ivr)
     {
@@ -146,7 +146,7 @@ class Client
 
     /**
      * Método para asignar pregunta
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function setAsk($ask)
     {
@@ -156,7 +156,7 @@ class Client
 
     /**
      * Método para asignar transaccion al input
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function setArgstran($tran)
     {
@@ -168,7 +168,7 @@ class Client
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function Normalize()
     {
@@ -180,7 +180,7 @@ class Client
 
     /**
      * Funcion para definir network
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function setNetwork($net, $config = ["provider", "contact"])
     {
@@ -198,7 +198,7 @@ class Client
 
     /**
      * Funcion para definir provider
-     * @version 2020-05-05
+     * @version        20.05.185.391
      */
     public static function setProvider($provider)
     {
@@ -208,7 +208,7 @@ class Client
 
     /**
      * Funcion para retornar type de entrada
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function isType()
     {
@@ -225,7 +225,7 @@ class Client
 
     /**
      * Funcion para retornar type de entrada
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function isLoad($arr = [])
     {
@@ -237,7 +237,7 @@ class Client
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @version 2020-04-17
+     * @version        20.05.185.391
      */
     public static function Contact()
     {
@@ -248,7 +248,7 @@ class Client
 
     /**
      * Funcion para normalizar las variables de entrada
-     * @version 2020-04-18
+     * @version        20.05.185.391
      */
     public static function Trunk()
     {
@@ -271,7 +271,7 @@ class Client
 
     /**
      * Funcion para verificar si el contacto y la tecno tienen activs pendientes
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     public static function Activ()
     {
@@ -282,7 +282,7 @@ class Client
 
     /**
      * Funcion para verificar si el contacto y la tecno tienen conversaciones
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     public static function Conversation()
     {
@@ -293,7 +293,7 @@ class Client
 
     /**
      * Funcion para inizializar el bot
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     public static function Bot()
     {

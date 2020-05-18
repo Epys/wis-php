@@ -9,7 +9,7 @@ class Schedule
 
     /**
      * Método para validar horario
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function availableIden($iden)
     {

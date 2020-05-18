@@ -9,7 +9,7 @@ class Ask
 
     /**
      * Método para responder preguntas
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function Response()
     {
@@ -33,7 +33,7 @@ class Ask
 
     /**
      * Método para buscar preguntas pendientes
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function Request($iden = false)
     {
@@ -75,7 +75,7 @@ class Ask
 
     /**
      * Método para buscar preguntas pendientes por IDEN_ACTIV = IDEN_TRANSAC
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function getPregIden($iden)
     {
@@ -101,7 +101,7 @@ class Ask
 
     /**
      * Método para buscar preguntas pendientes por contacto
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public static function getPregContact($number)
     {

@@ -10,7 +10,7 @@ class Comentario
 
     /**
      * Método para buscar actividades pendientes por contacto
-     * @version 2020-04-23
+     * @version        20.05.185.391
      */
     public static function setComentario()
     {
@@ -53,7 +53,7 @@ class Comentario
             }
 
             if (\Epys\Wis\Client::$args->message->content->text)
-                $text = substr(json_encode(\Epys\Wis\Client::$args->message->content->text), 1, -1);
+                $text = self::cleanText(\Epys\Wis\Client::$args->message->content->text);
 
             $comentario = [
                 "IDEN_USUARIO" => \Epys\Wis\Client::$contact->IDEN_CONTACTO,
@@ -87,7 +87,7 @@ class Comentario
 
     /**
      * Método para buscar actividades pendientes por contacto
-     * @version 2020-04-23
+     * @version        20.05.185.391
      */
     public static function setBot($iden, $text)
     {
@@ -101,7 +101,8 @@ class Comentario
             "IDEN_USUARIO" => '000000000001',
             "IDEN_TRANSAC" => $iden,
             "FECH_COMENTARIO" => round(microtime(true) * 1000),
-            "DESC_COMENTARIO" => substr(json_encode($text), 1, -1),
+            "DESC_COMENTARIO" => self::cleanText($text),
+            "FLAG_TYPE" => "text",
             "CODI_DIRECCION" => "sent"
         ];
 
@@ -113,6 +114,12 @@ class Comentario
         ]));
 
 
+    }
+
+    protected
+    static function cleanText($text)
+    {
+        return str_replace("\n", "", substr(json_encode(nl2br(trim($text))), 1, -1));
     }
 
     protected
@@ -234,7 +241,7 @@ class Comentario
 
         // Path de archivos
         $folder = 'whatsapp/' . \Epys\Wis\Client::$args->transac . '/';
-        $name = md5(time()).".ogg";
+        $name = md5(time()) . ".ogg";
         $path = $folder . $name;
 
         _file_put_contents(FCPATH . $path, $content);

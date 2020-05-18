@@ -31,7 +31,7 @@ class Init
 
     /**
      * Método para cuando recibo un mensaje de entrada
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     protected static function received()
     {
@@ -93,7 +93,7 @@ class Init
 
     /**
      * Método para cuando recibo un mensaje de salida
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     protected static function sent()
     {

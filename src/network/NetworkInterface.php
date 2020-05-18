@@ -33,5 +33,12 @@ interface NetworkInterface
 
     public function location($latitude, $longitude, $caption);
 
+    // Contacto
+    public function getContact($row);
+
+    public function setContact($row);
+
+    public function delContact($row);
+
 }
 

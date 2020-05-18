@@ -8,7 +8,7 @@ class Replace
 {
     /**
      * Método para remplazar textos entre corchetes
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     static function strtr($msje)

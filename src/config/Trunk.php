@@ -10,7 +10,7 @@ class Trunk
 
     /**
      * Método para capturar troncal desde la DB
-     * @version 2020-04-14
+     * @version        20.05.185.391
      */
     public static function Get()
     {
@@ -50,7 +50,7 @@ class Trunk
 
     /**
      * Método para crear un proveedor en la base de datos
-     * @version 2020-04-14
+     * @version        20.05.185.391
      */
     protected static function setProvider()
     {

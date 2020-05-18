@@ -9,7 +9,7 @@ class Transac
 
     /**
      * Método para buscar mensajes de una transacción
-     * @version 2020-04-19
+     * @version        20.05.185.391
      */
     public static function getMenssages($id)
     {
@@ -20,7 +20,7 @@ class Transac
 
     /**
      * Método para buscar mensajes de una transacc
-     * @version 2020-04-20
+     * @version        20.05.185.391
      */
     public
     function messages($provider = null, $contact = null, $transac = null)
