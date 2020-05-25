@@ -202,7 +202,7 @@ class Console
         self::log($msg);
 
         header("Content-Type:application/json");
-        die(json_encode(array_filter([
+        $obj = str_replace('\"', "",json_encode(array_filter([
             "success" => false,
             "timestamp" => time(),
             "pid" => getmypid(),
@@ -210,11 +210,13 @@ class Console
             "line" => $line,
             "code" => $codigo,
             "error" => $msg,
-            // "logs" => self::$_console["log"],
+            "logs" => self::$_console["log"],
             "input" => self::$_console["input"]
         ], function ($value) {
             return !is_null($value) && $value !== "";
         })));
+
+        die($obj);
 
     }
 
@@ -270,9 +272,11 @@ class Console
         $obj = array_filter(self::$_console["log"], function ($value) {
             return !is_null($value) && $value !== "";
         });
-        
+
+        $obj = str_replace('\"', "", json_encode($obj));
+
         header("Content-Type:application/json");
-        die(json_encode($obj));
+        die($obj);
     }
 
     public static function destruct()

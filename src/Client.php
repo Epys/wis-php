@@ -5,7 +5,7 @@ namespace Epys\Wis;
 class Client
 {
 
-    const VERSION = "0.53.59";
+    const VERSION = "0.57.78";
 
     const BASE_API = "https://api.wis.cl";
 
@@ -64,7 +64,7 @@ class Client
     /**
      * API Token
      */
-    protected static $token;
+    public static $token;
 
 
     /**
