@@ -15,7 +15,15 @@ class At
     public static function Response()
     {
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(["database", "args", "trunk", "contact"]);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
+
+        // Valido Troncal
+        if (!\Epys\Wis\Client::$trunk->CODI_TECNO)
+            return [];
+
+        // Valido Contacto
+        if (!\Epys\Wis\Client::$contact->IDEN_CONTACTO)
+            return [];
 
         $text = strtolower(trim(\Epys\Wis\Client::$args->message->content->text));
 
