@@ -9,7 +9,7 @@ class Audio
 
     /**
      * Método para normalizar y pasar a json
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Normalize($url, $caption)
     {

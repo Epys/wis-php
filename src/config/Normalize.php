@@ -16,7 +16,7 @@ class Normalize
 
     /**
      * Método para capturar input de PHP
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Input()
     {
@@ -47,7 +47,7 @@ class Normalize
 
     /**
      * Método para Validar
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Validate($args)
     {
@@ -76,7 +76,7 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function whatsapp($objs)
     {
@@ -107,7 +107,7 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function whatsappPayload($payload)
     {
@@ -148,7 +148,7 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function whatsappPayloadMessage($message)
     {
@@ -207,7 +207,7 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function whatsappPayloadDelivery($delivery)
     {
@@ -232,7 +232,7 @@ class Normalize
     /**
      * Método para validar la estructura
      * @param $args Argumento recivido en POST
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function whatsappPayloadContact($contact)
     {

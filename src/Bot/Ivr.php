@@ -148,6 +148,7 @@ class Ivr
 
         // Busco menus asociados
         $menus = \Epys\Wis\Client::$database->where(["IDEN_PARENT" => $parent, "ACTIVO" => 1])->order_by("IDEN_IVR ASC")->get("WI.WIT_IVR")->result();
+        \Epys\Wis\Console::log(\Epys\Wis\Client::$database->last_query());
 
         $msj = null;
 

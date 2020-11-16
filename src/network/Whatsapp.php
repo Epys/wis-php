@@ -55,7 +55,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para chequear si esta proveedor y contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function check(): bool
@@ -67,7 +67,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function send($provider = null, $contact = null, $transac = null, $content = null)
@@ -114,7 +114,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar options
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function options($options = ["provider", "contact", "transac"])
@@ -136,7 +136,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function provider($provider)
@@ -156,7 +156,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function contact($contact)
@@ -176,7 +176,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para asignar model
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function transac($transac)
@@ -192,7 +192,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar text
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function text($text)
@@ -207,7 +207,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar imagen
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function image($file, $caption)
@@ -222,7 +222,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar stiker
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function stiker($file, $caption)
@@ -237,7 +237,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar documento
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function document($file, $caption)
@@ -252,7 +252,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar audio
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function audio($file, $caption)
@@ -267,7 +267,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar video
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function video($file, $caption)
@@ -282,7 +282,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para enviar localizador
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function location($latitude, $longitude, $caption)
@@ -297,7 +297,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para generar ID unico
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected
     static function clientid()
@@ -311,7 +311,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para buscar contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function getContact($row)
@@ -344,7 +344,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para actualizar contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function setContact($row)
@@ -383,7 +383,7 @@ class Whatsapp implements NetworkInterface
 
     /**
      * Método para eliminar contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     function delContact($row)

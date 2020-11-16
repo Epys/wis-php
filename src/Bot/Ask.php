@@ -9,31 +9,32 @@ class Ask
 
     /**
      * Método para responder preguntas
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Response()
     {
         \Epys\Wis\Console::log("Epys\Wis\Bot\Ask::Response().");
 
         // Verifico que esten cargados los datos
-        \Epys\Wis\Client::isLoad(["database", "args", "conversation"]);
+        \Epys\Wis\Client::isLoad(["database", "args"]);
 
         // Valido que el IVR tenga una acción o pregunta
         if (\Epys\Wis\Client::$conversation->CODI_ACCION) {
-
             $Blob = new \Epys\Wis\Util\Blob();
             eval('$Blob->run = function () { ' . \Epys\Wis\Client::$conversation->BLOB_ACCION . '};');
             $Blob->run();
-
         }
 
-        self::Request(\Epys\Wis\Client::$conversation->IDEN_ACTIV);
+        if (\Epys\Wis\Client::$conversation->IDEN_ACTIV)
+            self::Request(\Epys\Wis\Client::$conversation->IDEN_ACTIV);
+        else
+            self::Request();
 
     }
 
     /**
      * Método para buscar preguntas pendientes
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Request($iden = false)
     {
@@ -75,7 +76,7 @@ class Ask
 
     /**
      * Método para buscar preguntas pendientes por IDEN_ACTIV = IDEN_TRANSAC
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getPregIden($iden)
     {
@@ -101,7 +102,7 @@ class Ask
 
     /**
      * Método para buscar preguntas pendientes por contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getPregContact($number)
     {

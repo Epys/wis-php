@@ -10,7 +10,7 @@ class Contact
 
     /**
      * Método para capturar contacto desde la DB
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function Get()
     {
@@ -40,7 +40,7 @@ class Contact
 
     /**
      * Método para crear un contacto en la base de datos
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function setContact()
     {

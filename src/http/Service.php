@@ -9,7 +9,7 @@ class Service
 
     /**
      * Método para enviar mensaje
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public
     static function POST($url, $obj)
@@ -44,7 +44,6 @@ class Service
         curl_close($ch);
 
         $result = json_decode($response, FALSE);
-
 
         \Epys\Wis\Console::output($fields);
         \Epys\Wis\Console::output($response);

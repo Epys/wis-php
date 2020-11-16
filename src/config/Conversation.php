@@ -9,7 +9,7 @@ class Conversation
 
     /**
      * Método para buscar conversaciones
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getContactTrunk()
     {
@@ -72,7 +72,7 @@ class Conversation
 
     /**
      * Método para limpiar
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function delContactTrunk()
     {
@@ -92,7 +92,7 @@ class Conversation
 
     /**
      * Método para crear
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function setContactTrunk($option = ["IDEN_IVR", "CODI_PREGUNTA", "IDEN_ACTIV"])
     {

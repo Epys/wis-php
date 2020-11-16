@@ -31,17 +31,17 @@ class Init
 
     /**
      * Método para cuando recibo un mensaje de entrada
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function received()
     {
         \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received().");
 
-        // Busco Arrobas
-        \Epys\Wis\Bot\At::Response();
-
         // Busco Actividad pendiente
         \Epys\Wis\Client::Activ();
+
+        // Busco Arrobas
+        \Epys\Wis\Bot\At::Response();
 
         // Busco Conversaciones pendientes
         \Epys\Wis\Client::Conversation();
@@ -69,12 +69,11 @@ class Init
         // Verifico si hay actividades Pendientes
         if (\Epys\Wis\Client::$activ->IDEN_ACTIV) {
 
-            \Epys\Wis\Console::log("Epys\Wis\Bot\Init::received() IDEN_ACTIV[" . \Epys\Wis\Client::$activ->IDEN_ACTIV . "].");
-
+            \Epys\Wis\Console::log("Epys\Wis\Bot\Init::IDEN_ACTIV[" . \Epys\Wis\Client::$activ->IDEN_ACTIV . "].");
+            // Veo si es una respuesta de pregunta
+            \Epys\Wis\Bot\Ask::Response();
+            // Guardo comentario
             \Epys\Wis\Flow\Comentario::setComentario();
-
-            if (\Epys\Wis\Client::$conversation->CODI_PREGUNTA)
-                \Epys\Wis\Bot\Ask::Response();
 
         } else {
 
@@ -93,7 +92,7 @@ class Init
 
     /**
      * Método para cuando recibo un mensaje de salida
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     protected static function sent()
     {

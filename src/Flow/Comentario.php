@@ -10,7 +10,7 @@ class Comentario
 
     /**
      * Método para buscar actividades pendientes por contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function setComentario()
     {
@@ -87,7 +87,7 @@ class Comentario
 
     /**
      * Método para buscar actividades pendientes por contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function setBot($iden, $text)
     {

@@ -8,7 +8,7 @@ class Activtemp
 
     /**
      * Método para buscar actividades pendientes por contacto y tecno
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getContactTecno()
     {
@@ -54,7 +54,7 @@ class Activtemp
 
     /**
      * Método para buscar actividades pendientes por contacto
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getContact()
     {
@@ -93,7 +93,7 @@ class Activtemp
 
     /**
      * Método para buscar actividades pendientes por activ
-     * @version        20.05.185.391
+     * @version        20.11.302.503
      */
     public static function getActiv($iden)
     {
