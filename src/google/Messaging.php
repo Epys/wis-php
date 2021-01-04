@@ -47,28 +47,13 @@ class Messaging
                 "data" => $data
             ]);
         }
-
-
+        
         // Header with content_type api key
-        $headers = array(
-            'Content-Type:application/json',
-            'Authorization:key=' . self::$token
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::$url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        \Epys\Wis\Console::log($result);
-
-        return $result;
+        $headers = ' --header "Content-Type:application/json"';
+        $headers .= ' --header "Authorization:key=' . self::$token . '"';
+        $datos = json_encode($json);
+        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos);
+        return $json;
     }
 
     /**
@@ -92,25 +77,11 @@ class Messaging
         ]);
 
         // Header with content_type api key
-        $headers = array(
-            'Content-Type:application/json',
-            'Authorization:key=' . self::$token
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::$url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        \Epys\Wis\Console::log($result);
-
-        return $result;
+        $headers = ' --header "Content-Type:application/json"';
+        $headers .= ' --header "Authorization:key=' . self::$token . '"';
+        $datos = json_encode($json);
+        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos);
+        return $json;
     }
 
     /**
