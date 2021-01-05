@@ -52,7 +52,7 @@ class Messaging
         $headers = ' --header "Content-Type:application/json"';
         $headers .= ' --header "Authorization:key=' . self::$token . '"';
         $datos = json_encode($json);
-        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos);
+        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos . ' &> /dev/null &');
         return $json;
     }
 
@@ -80,7 +80,7 @@ class Messaging
         $headers = ' --header "Content-Type:application/json"';
         $headers .= ' --header "Authorization:key=' . self::$token . '"';
         $datos = json_encode($json);
-        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos);
+        shell_exec('curl -X POST ' . $headers . ' '. self::$url . ' -d ' . $datos . ' &> /dev/null &');
         return $json;
     }
 
